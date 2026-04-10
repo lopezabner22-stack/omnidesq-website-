@@ -20,7 +20,9 @@
 
   /* NAV */
   nav { position: fixed; top: 0; width: 100%; background: rgba(10,15,26,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); z-index: 100; padding: 18px 60px; display: flex; justify-content: space-between; align-items: center; }
-  .nav-logo { font-size: 18px; font-weight: 700; letter-spacing: 3px; color: var(--blue); }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo img { height: 32px; width: auto; }
+  .nav-logo span { font-size: 16px; font-weight: 600; letter-spacing: 2px; color: var(--white); }
   .nav-links { display: flex; gap: 35px; }
   .nav-links a { color: var(--gray); text-decoration: none; font-size: 13px; letter-spacing: 1px; transition: color 0.2s; }
   .nav-links a:hover { color: var(--white); }
@@ -123,7 +125,7 @@
 <body>
 
 <nav>
-  <div class="nav-logo">OMNIDESQ</div>
+  <a href="#" class="nav-logo"><img src="logo.jpg" alt="Omnidesq"><span>OMNIDESQ</span></a>
   <div class="nav-links">
     <a href="#how-it-works">How It Works</a>
     <a href="#solutions">Solutions</a>
@@ -136,6 +138,7 @@
 
 <div class="hero">
   <div>
+    <img src="logo.jpg" alt="Omnidesq" style="height:80px;width:auto;margin-bottom:30px;">
     <div class="hero-tag">AI Receptionist Technology</div>
     <h1>Your Front Desk,<br><span>Powered by AI</span></h1>
     <p>Omnidesq installs AI voice systems that answer every call, book appointments in real time, and never miss a patient — 24 hours a day, in English and Spanish.</p>
@@ -363,7 +366,7 @@
 </section>
 
 <footer>
-  <div class="footer-logo">OMNIDESQ</div>
+  <img src="logo.jpg" alt="Omnidesq" style="height:36px;width:auto;">
   <div class="footer-text">© 2026 Omnidesq LLC. Milwaukee, Wisconsin.</div>
   <div class="footer-text" style="color:var(--blue)">abner@omnidesq.com</div>
 </footer>
