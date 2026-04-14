@@ -28,8 +28,8 @@
     display: flex; align-items: center; justify-content: space-between;
   }
   .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-  .nav-logo img { height: 32px; }
-  .nav-logo span { font-size: 17px; font-weight: 700; letter-spacing: 2px; color: var(--white); }
+  .nav-logo img { height: 40px; }
+  .nav-logo span { display: none; }
   .nav-links { display: flex; gap: 32px; align-items: center; }
   .nav-links a { color: var(--gray); text-decoration: none; font-size: 14px; transition: color .2s; }
   .nav-links a:hover { color: var(--white); }
@@ -146,8 +146,8 @@
   /* FOOTER */
   footer { background: var(--card); border-top: 1px solid var(--border); padding: 32px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
   .footer-logo { display: flex; align-items: center; gap: 10px; }
-  .footer-logo img { height: 28px; }
-  .footer-logo span { font-size: 15px; font-weight: 700; letter-spacing: 2px; color: var(--white); }
+  .footer-logo img { height: 36px; }
+  .footer-logo span { display: none; }
   .footer-text { font-size: 12px; color: var(--gray); }
   .footer-email { font-size: 12px; color: var(--blue); }
 
@@ -443,6 +443,7 @@ async function submitForm(e) {
   btn.disabled = true;
   
   try {
+    // Try Railway, fallback gracefully
     const res = await fetch('https://aria-booking-server-production.up.railway.app/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
