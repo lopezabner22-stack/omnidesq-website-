@@ -24,11 +24,11 @@
     position: fixed; top: 0; width: 100%; z-index: 100;
     background: rgba(8,13,22,0.92); backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
-    padding: 0 5%; height: 80px;
+    padding: 0 5%; height: 110px;
     display: flex; align-items: center; justify-content: space-between;
   }
   .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-  .nav-logo img { height: 64px; }
+  .nav-logo img { height: 96px; }
   .nav-logo span { display: none; }
   .nav-links { display: flex; gap: 32px; align-items: center; }
   .nav-links a { color: var(--gray); text-decoration: none; font-size: 14px; transition: color .2s; }
@@ -279,49 +279,13 @@
 
 <section id="pricing" class="pricing-alt">
   <div class="section-inner">
-    <div class="section-tag">Pricing</div>
-    <div class="section-title">Simple. Transparent. No surprises.</div>
-    <div class="section-sub">One-time setup. Monthly service. Cancel anytime.</div>
-    <div class="pricing-grid">
-      <div class="price-card">
-        <div class="price-label">Starter</div>
-        <div class="price-amount">$300<span>/mo</span></div>
-        <div class="price-setup">$750 one-time setup</div>
-        <ul class="price-features">
-          <li>AI phone receptionist</li>
-          <li>One location</li>
-          <li>Calendar integration</li>
-          <li>Email confirmations</li>
-          <li>Monthly check-in</li>
-        </ul>
-      </div>
-      <div class="price-card featured">
-        <div class="price-badge">MOST POPULAR</div>
-        <div class="price-label">Growth</div>
-        <div class="price-amount">$600<span>/mo</span></div>
-        <div class="price-setup">$1,500 one-time setup</div>
-        <ul class="price-features">
-          <li>Everything in Starter</li>
-          <li>SMS + email confirmations</li>
-          <li>Custom voice and script</li>
-          <li>Performance reports</li>
-          <li>Priority support</li>
-        </ul>
-      </div>
-      <div class="price-card">
-        <div class="price-label">Full Practice</div>
-        <div class="price-amount">$1,200<span>/mo</span></div>
-        <div class="price-setup">$3,000 one-time setup</div>
-        <ul class="price-features">
-          <li>Everything in Growth</li>
-          <li>Multiple locations</li>
-          <li>Staff training session</li>
-          <li>Quarterly reviews</li>
-          <li>Dedicated account manager</li>
-        </ul>
-      </div>
+    <div style="text-align:center; max-width:600px; margin:0 auto;">
+      <div class="section-tag" style="text-align:center;">Pricing</div>
+      <div class="section-title">Built around your practice.</div>
+      <p style="color:var(--gray); font-size:17px; line-height:1.7; margin-bottom:36px;">Every practice is different. We build a custom solution around your needs, your volume, and your goals — then price it accordingly. No packages, no surprises.</p>
+      <a href="#contact" class="btn-primary" style="display:inline-block;">Get a Custom Quote →</a>
+      <p style="color:var(--gray); font-size:13px; margin-top:20px;">Most practices see ROI in the first month. We will show you the math before you sign anything.</p>
     </div>
-    <p style="text-align:center; color:var(--gray); font-size:13px; margin-top:28px;">Annual plans available — save up to 2 months. Referral program: refer a client that signs and get one month free.</p>
   </div>
 </section>
 
