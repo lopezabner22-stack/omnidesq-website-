@@ -371,7 +371,8 @@
           <label>Message (optional)</label>
           <textarea placeholder="Tell us about your practice..."></textarea>
         </div>
-        <button class="submit-btn">Request a Demo →</button>
+        <button class="submit-btn" id="submitBtn" onclick="submitForm(event)">Request a Demo →</button>
+        <div id="formMsg" style="margin-top:16px;font-size:14px;display:none;"></div>
       </div>
       <div class="contact-info">
         <h3>We'd love to hear from you.</h3>
@@ -416,5 +417,58 @@
   <div class="footer-email">abner@omnidesq.com</div>
 </footer>
 
+<script>
+async function submitForm(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const msg = document.getElementById('formMsg');
+  const inputs = document.querySelectorAll('.contact-form-wrap input, .contact-form-wrap select, .contact-form-wrap textarea');
+  
+  const data = {
+    name: inputs[0].value,
+    business: inputs[1].value,
+    email: inputs[2].value,
+    businessType: inputs[3].value,
+    message: inputs[4].value
+  };
+  
+  if (!data.name || !data.email) {
+    msg.style.display = 'block';
+    msg.style.color = '#f87171';
+    msg.textContent = 'Please enter your name and email.';
+    return;
+  }
+  
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+  
+  try {
+    const res = await fetch('https://aria-booking-server-production.up.railway.app/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    msg.style.display = 'block';
+    if (result.success) {
+      msg.style.color = '#34d399';
+      msg.textContent = result.message;
+      inputs.forEach(i => i.value = '');
+      btn.textContent = 'Sent!';
+    } else {
+      msg.style.color = '#f87171';
+      msg.textContent = result.message;
+      btn.textContent = 'Request a Demo →';
+      btn.disabled = false;
+    }
+  } catch(err) {
+    msg.style.display = 'block';
+    msg.style.color = '#f87171';
+    msg.textContent = 'Something went wrong. Email us at abner@omnidesq.com';
+    btn.textContent = 'Request a Demo →';
+    btn.disabled = false;
+  }
+}
+</script>
 </body>
 </html>
