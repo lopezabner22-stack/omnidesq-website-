@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Missed Call Calculator — How Much Are You Losing? | Omnidesq</title>
+<meta name="description" content="Calculate exactly how much revenue your business loses every year from missed calls. See your ROI with Aria AI receptionist in seconds.">
+<meta property="og:title" content="Missed Call Revenue Calculator — Omnidesq">
+<meta property="og:description" content="Slide the sliders and watch your missed revenue appear in real time. Then see how fast Aria pays for itself.">
+<meta property="og:url" content="https://omnidesq.com/calculator.html">
+<style>
+  :root {
+    --dark: #080d16;
+    --card: #0d1520;
+    --border: #1a2840;
+    --blue: #3b82f6;
+    --blue-light: #60a5fa;
+    --white: #f0f6ff;
+    --gray: #6b7e95;
+    --accent: #0ea5e9;
+    --red: #ef4444;
+    --red-light: #fca5a5;
+    --green: #10b981;
+    --green-light: #6ee7b7;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; background: var(--dark); color: var(--white); overflow-x: hidden; }
+
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(8,13,22,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%; height: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo img { height: 52px; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { color: var(--gray); text-decoration: none; font-size: 14px; transition: color .2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--white); }
+  .nav-cta { background: var(--blue); color: #fff; padding: 9px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity .2s; }
+  .nav-cta:hover { opacity: .85; }
+
+  .hero {
+    padding: 120px 5% 60px;
+    text-align: center;
+    background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(239,68,68,.1), transparent);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.25);
+    color: var(--red-light); font-size: 12px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 6px 16px; border-radius: 100px; margin-bottom: 24px;
+  }
+  .hero h1 { font-size: clamp(32px, 5.5vw, 58px); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 16px; }
+  .hero h1 em { font-style: normal; color: var(--red-light); }
+  .hero p { font-size: 18px; color: var(--gray); line-height: 1.7; max-width: 540px; margin: 0 auto; }
+
+  /* CALCULATOR */
+  .calc-wrap { max-width: 1100px; margin: 60px auto; padding: 0 5%; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+  .calc-inputs { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 40px; }
+  .calc-inputs h2 { font-size: 18px; font-weight: 700; margin-bottom: 32px; color: var(--white); }
+  .input-group { margin-bottom: 28px; }
+  .input-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+  .input-label span { font-size: 20px; font-weight: 900; color: var(--white); letter-spacing: 0; }
+  input[type="range"] {
+    -webkit-appearance: none; width: 100%; height: 6px;
+    background: var(--border); border-radius: 3px; outline: none; cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 22px; height: 22px;
+    background: var(--blue); border-radius: 50%; cursor: pointer;
+    border: 3px solid var(--dark); box-shadow: 0 0 0 2px var(--blue);
+    transition: box-shadow .2s;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 0 4px rgba(59,130,246,.3); }
+  .range-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--gray); margin-top: 6px; }
+  .business-selector { margin-bottom: 28px; }
+  .business-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+  .biz-btn {
+    background: var(--dark); border: 1px solid var(--border); color: var(--gray);
+    padding: 10px 8px; border-radius: 10px; font-size: 12px; font-weight: 600;
+    cursor: pointer; text-align: center; transition: all .2s;
+  }
+  .biz-btn:hover { border-color: var(--blue); color: var(--white); }
+  .biz-btn.active { background: rgba(59,130,246,.15); border-color: var(--blue); color: var(--blue-light); }
+
+  /* OUTPUTS */
+  .calc-outputs { display: flex; flex-direction: column; gap: 16px; }
+  .output-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 24px 28px;
+  }
+  .output-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray); margin-bottom: 8px; }
+  .output-number { font-size: 42px; font-weight: 900; line-height: 1; }
+  .output-number.red { color: var(--red); }
+  .output-number.green { color: var(--green); }
+  .output-number.white { color: var(--white); }
+  .output-sub { font-size: 12px; color: var(--gray); margin-top: 6px; }
+
+  .output-big {
+    background: linear-gradient(135deg, rgba(239,68,68,.08), rgba(239,68,68,.03));
+    border: 1px solid rgba(239,68,68,.3);
+    border-radius: 20px; padding: 32px;
+  }
+  .output-big .output-label { color: var(--red-light); }
+  .output-big .output-number { font-size: 60px; }
+
+  .output-green-card {
+    background: linear-gradient(135deg, rgba(16,185,129,.08), rgba(16,185,129,.03));
+    border: 1px solid rgba(16,185,129,.3);
+    border-radius: 20px; padding: 28px;
+  }
+  .output-green-card .output-label { color: var(--green-light); }
+  .output-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .cta-wrap { max-width: 1100px; margin: 0 auto 80px; padding: 0 5%; }
+  .cta-card {
+    background: linear-gradient(135deg, rgba(59,130,246,.12), rgba(59,130,246,.04));
+    border: 1px solid rgba(59,130,246,.3); border-radius: 20px;
+    padding: 48px; text-align: center;
+  }
+  .cta-card h2 { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; margin-bottom: 12px; }
+  .cta-card p { font-size: 16px; color: var(--gray); margin-bottom: 32px; line-height: 1.7; }
+  .cta-btn {
+    display: inline-block; background: var(--blue); color: #fff;
+    padding: 16px 36px; border-radius: 12px; font-size: 17px; font-weight: 700;
+    text-decoration: none; transition: all .2s; letter-spacing: -.2px;
+  }
+  .cta-btn:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(59,130,246,.3); }
+  .cta-sub { font-size: 13px; color: var(--gray); margin-top: 16px; }
+
+  footer { background: var(--card); border-top: 1px solid var(--border); padding: 28px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-text { font-size: 12px; color: var(--gray); }
+  .footer-email { font-size: 12px; color: var(--blue); }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .calc-wrap { grid-template-columns: 1fr; }
+    .output-grid { grid-template-columns: 1fr; }
+    .business-grid { grid-template-columns: repeat(2, 1fr); }
+    .output-big .output-number { font-size: 44px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="logo.png" alt="Omnidesq">
+  </a>
+  <div class="nav-links">
+    <a href="/#how">How It Works</a>
+    <a href="/#features">Features</a>
+    <a href="/#pricing">Pricing</a>
+    <a href="/calculator.html" class="active">Calculator</a>
+    <a href="/#contact">Contact</a>
+    <a href="/es/">Español</a>
+  </div>
+  <a href="/#contact" class="nav-cta">Get Aria</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">💸 Revenue Recovery Calculator</div>
+  <h1>How Much Are Missed Calls<br><em>Costing You This Year?</em></h1>
+  <p>Most businesses have no idea. Move the sliders and watch the number appear in real time. It's usually terrifying.</p>
+</div>
+
+<div class="calc-wrap">
+  <!-- INPUTS -->
+  <div class="calc-inputs">
+    <h2>⚙️ Your Business Numbers</h2>
+
+    <div class="business-selector">
+      <div class="input-label">Business Type</div>
+      <div class="business-grid">
+        <button class="biz-btn active" data-type="dental" onclick="setBiz(this, 'Dental', 250)">🦷 Dental</button>
+        <button class="biz-btn" data-type="medspa" onclick="setBiz(this, 'Med Spa', 400)">💆 Med Spa</button>
+        <button class="biz-btn" data-type="salon" onclick="setBiz(this, 'Hair Salon', 90)">✂️ Salon</button>
+        <button class="biz-btn" data-type="chiro" onclick="setBiz(this, 'Chiropractor', 150)">🦴 Chiro</button>
+        <button class="biz-btn" data-type="law" onclick="setBiz(this, 'Law Firm', 500)">⚖️ Law Firm</button>
+        <button class="biz-btn" data-type="other" onclick="setBiz(this, 'Other', 150)">🏢 Other</button>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-label">
+        Average service/appointment value
+        <span id="val-appt">$150</span>
+      </div>
+      <input type="range" id="sl-appt" min="50" max="1500" step="10" value="150" oninput="update()">
+      <div class="range-labels"><span>$50</span><span>$1,500</span></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-label">
+        Inbound calls per week
+        <span id="val-calls">50</span>
+      </div>
+      <input type="range" id="sl-calls" min="10" max="300" step="5" value="50" oninput="update()">
+      <div class="range-labels"><span>10</span><span>300</span></div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-label">
+        % of calls missed or unanswered
+        <span id="val-miss">20%</span>
+      </div>
+      <input type="range" id="sl-miss" min="5" max="60" step="1" value="20" oninput="update()">
+      <div class="range-labels"><span>5%</span><span>60%</span></div>
+    </div>
+
+    <div style="background: rgba(59,130,246,.06); border: 1px solid var(--border); border-radius: 12px; padding: 16px; font-size: 13px; color: var(--gray); line-height: 1.6;">
+      💡 <strong style="color:var(--white);">Industry data:</strong> Dental practices miss 25–35% of calls. Med spas miss 20–30%. We assume 60% of missed callers would have booked if answered.
+    </div>
+  </div>
+
+  <!-- OUTPUTS -->
+  <div class="calc-outputs">
+    <div class="output-big">
+      <div class="output-label">💀 Lost Revenue Per Year</div>
+      <div class="output-number red" id="out-year">$0</div>
+      <div class="output-sub" id="out-year-sub">Based on your numbers above</div>
+    </div>
+
+    <div class="output-grid">
+      <div class="output-card">
+        <div class="output-label">Missed calls / week</div>
+        <div class="output-number white" id="out-missed-calls">10</div>
+      </div>
+      <div class="output-card">
+        <div class="output-label">Missed clients / week</div>
+        <div class="output-number red" id="out-missed-clients">6</div>
+      </div>
+      <div class="output-card">
+        <div class="output-label">Lost / week</div>
+        <div class="output-number red" id="out-week">$0</div>
+      </div>
+      <div class="output-card">
+        <div class="output-label">Lost / month</div>
+        <div class="output-number red" id="out-month">$0</div>
+      </div>
+    </div>
+
+    <div class="output-green-card">
+      <div class="output-label">✅ Aria pays for itself in…</div>
+      <div class="output-number green" id="out-days">— days</div>
+      <div class="output-sub" id="out-aria-detail">Aria costs $149/month. You'd recover that in days, not months.</div>
+    </div>
+  </div>
+</div>
+
+<div class="cta-wrap">
+  <div class="cta-card">
+    <h2 id="cta-headline">Stop Losing $0/month — Get Aria</h2>
+    <p>Aria answers every call 24/7, books appointments in real time, and pays for itself with the first client she catches. No contracts. White-glove setup.</p>
+    <a href="/#contact" class="cta-btn" id="cta-btn">Stop the Bleeding — Get Aria Today →</a>
+    <div class="cta-sub">Most practices see full ROI within their first week. Let us show you the math.</div>
+  </div>
+</div>
+
+<footer>
+  <a href="/" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+    <img src="logo.png" alt="Omnidesq" style="height:32px;">
+  </a>
+  <div class="footer-text">© 2026 Omnidesq LLC · Milwaukee, Wisconsin</div>
+  <div class="footer-email">abner@omnidesq.com</div>
+</footer>
+
+<script>
+const ARIA_COST = 149; // $/month
+let currentAppt = 150;
+
+function fmt(n) {
+  if (n >= 1000000) return '$' + (n/1000000).toFixed(1) + 'M';
+  if (n >= 1000) return '$' + Math.round(n/1000) + 'K';
+  return '$' + Math.round(n).toLocaleString();
+}
+
+function fmtFull(n) {
+  return '$' + Math.round(n).toLocaleString();
+}
+
+function setBiz(el, name, defaultVal) {
+  document.querySelectorAll('.biz-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  const sl = document.getElementById('sl-appt');
+  sl.value = defaultVal;
+  currentAppt = defaultVal;
+  document.getElementById('val-appt').textContent = '$' + defaultVal;
+  update();
+}
+
+function update() {
+  const appt = parseInt(document.getElementById('sl-appt').value);
+  const calls = parseInt(document.getElementById('sl-calls').value);
+  const missRate = parseInt(document.getElementById('sl-miss').value) / 100;
+
+  document.getElementById('val-appt').textContent = '$' + appt.toLocaleString();
+  document.getElementById('val-calls').textContent = calls;
+  document.getElementById('val-miss').textContent = Math.round(missRate * 100) + '%';
+
+  const missedCalls = Math.round(calls * missRate);
+  const missedClients = Math.round(missedCalls * 0.6);
+  const lostWeek = missedClients * appt;
+  const lostMonth = lostWeek * 4.33;
+  const lostYear = lostWeek * 52;
+
+  // Days to recover Aria cost
+  const dailyRecovery = lostWeek / 7;
+  const daysToRecover = dailyRecovery > 0 ? Math.ceil(ARIA_COST / dailyRecovery) : null;
+
+  document.getElementById('out-missed-calls').textContent = missedCalls;
+  document.getElementById('out-missed-clients').textContent = missedClients;
+  document.getElementById('out-week').textContent = fmtFull(lostWeek);
+  document.getElementById('out-month').textContent = fmtFull(lostMonth);
+  document.getElementById('out-year').textContent = fmt(lostYear);
+  document.getElementById('out-year-sub').textContent = missedClients + ' potential clients lost per week × $' + appt + ' avg value × 52 weeks';
+
+  if (daysToRecover && daysToRecover < 365) {
+    document.getElementById('out-days').textContent = daysToRecover + ' days';
+    document.getElementById('out-aria-detail').textContent =
+      'Aria costs $' + ARIA_COST + '/month. At your current miss rate, you\'d recover that in just ' + daysToRecover + ' days of answered calls.';
+  } else if (dailyRecovery === 0) {
+    document.getElementById('out-days').textContent = '—';
+    document.getElementById('out-aria-detail').textContent = 'Adjust the sliders to see your recovery timeline.';
+  } else {
+    document.getElementById('out-days').textContent = 'Fast';
+    document.getElementById('out-aria-detail').textContent =
+      'Aria costs $' + ARIA_COST + '/month. At your miss rate, the ROI is immediate.';
+  }
+
+  const ctaBtn = document.getElementById('cta-btn');
+  const ctaHead = document.getElementById('cta-headline');
+  const monthStr = fmtFull(lostMonth);
+  ctaHead.textContent = 'Stop Losing ' + monthStr + '/month — Get Aria';
+  ctaBtn.textContent = 'Stop Losing ' + monthStr + '/month — Get Aria →';
+  ctaBtn.href = '/#contact';
+}
+
+update();
+</script>
+</body>
+</html>
