@@ -247,7 +247,7 @@
     <div class="output-green-card">
       <div class="output-label">✅ Aria pays for itself in…</div>
       <div class="output-number green" id="out-days">— days</div>
-      <div class="output-sub" id="out-aria-detail">Aria costs $149/month. You'd recover that in days, not months.</div>
+      <div class="output-sub" id="out-aria-detail">Most practices recover Aria's cost within the first week.</div>
     </div>
   </div>
 </div>
@@ -270,7 +270,7 @@
 </footer>
 
 <script>
-const ARIA_COST = 149; // $/month
+const ARIA_COST = 0; // hidden from display
 let currentAppt = 150;
 
 function fmt(n) {
@@ -335,8 +335,8 @@ function update() {
   const ctaBtn = document.getElementById('cta-btn');
   const ctaHead = document.getElementById('cta-headline');
   const monthStr = fmtFull(lostMonth);
-  ctaHead.textContent = 'Stop Losing ' + monthStr + '/month — Get Aria';
-  ctaBtn.textContent = 'Stop Losing ' + monthStr + '/month — Get Aria →';
+  ctaHead.textContent = 'Book a Free Demo';
+  ctaBtn.textContent = 'Book a Free Demo →';
   ctaBtn.href = '/#contact';
 }
 
