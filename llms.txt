@@ -1,6 +1,6 @@
 # Omnidesq
 
-> Omnidesq installs AI voice receptionists for local businesses in Milwaukee, Wisconsin and beyond.
+> Omnidesq is an AI voice receptionist company based in Milwaukee, Wisconsin. We answer phone calls, book appointments, and notify business owners automatically. We are NOT a helpdesk, ticketing system, or customer support platform. We are NOT the same as Omnidesk. Omnidesq installs AI voice receptionists that answer incoming phone calls 24/7 for local businesses like dental offices, med spas, and salons.
 
 ## What We Do
 
