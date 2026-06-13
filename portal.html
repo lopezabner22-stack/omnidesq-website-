@@ -559,6 +559,7 @@
         <button class="tab-btn" onclick="switchTab('agents',this)">Phone Agents</button>
         <button class="tab-btn" onclick="switchTab('pipeline',this)">Pipeline</button>
         <button class="tab-btn" onclick="switchTab('actions',this)">Action Items</button>
+        <button class="tab-btn" onclick="switchTab('content',this)">Content</button>
       </div>
 
       <div class="tab-panel" id="tab-overview">
@@ -619,6 +620,53 @@
               <div class="p-value">${p.value}</div>
             </div>`).join('')}
         </div>
+      </div>
+
+      <div class="tab-panel" id="tab-content">
+        <section>
+          <div class="section-title">Blog Post Generator</div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:24px">
+            <div style="margin-bottom:16px">
+              <label class="field-label" style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Topic</label>
+              <input id="blog-topic" class="field-input" type="text" placeholder="e.g. Why Milwaukee salons lose clients after hours" style="width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.95rem;outline:none" />
+            </div>
+            <div style="margin-bottom:16px">
+              <label class="field-label" style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Keywords (comma separated)</label>
+              <input id="blog-keywords" class="field-input" type="text" placeholder="AI receptionist, Milwaukee, missed calls" style="width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.95rem;outline:none" />
+            </div>
+            <div style="margin-bottom:20px">
+              <label class="field-label" style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Video Format</label>
+              <select id="video-format" style="width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.95rem;outline:none">
+                <option value="vertical">Vertical (TikTok / Reels 9:16)</option>
+                <option value="horizontal">Horizontal (YouTube 16:9)</option>
+              </select>
+            </div>
+            <button onclick="generateContent()" id="generate-btn" style="width:100%;padding:14px;background:var(--gold);color:#000;border:none;border-radius:8px;font-family:Inter,sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;letter-spacing:0.03em">Generate Blog Post + Video</button>
+            <div id="content-status" style="margin-top:16px;font-size:0.85rem;color:var(--muted);text-align:center;display:none"></div>
+            <div id="content-result" style="margin-top:16px;display:none">
+              <div style="background:var(--bg);border:1px solid rgba(201,168,76,0.3);border-radius:8px;padding:16px">
+                <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Published</div>
+                <a id="blog-url" href="#" target="_blank" style="color:var(--white);font-size:0.88rem;word-break:break-all"></a>
+              </div>
+            </div>
+            <div id="video-result" style="margin-top:12px;display:none">
+              <div style="background:var(--bg);border:1px solid rgba(52,152,219,0.3);border-radius:8px;padding:16px">
+                <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);margin-bottom:8px">Video Rendering</div>
+                <div id="video-status-text" style="font-size:0.85rem;color:var(--muted)">Rendering in progress. Check back in 30 seconds.</div>
+                <div id="video-url-wrap" style="display:none;margin-top:8px"><a id="video-url" href="#" target="_blank" style="color:var(--white);font-size:0.88rem">Download Video</a></div>
+              </div>
+            </div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px">
+            <div class="section-title" style="margin-bottom:12px">Recent Posts</div>
+            <div style="font-size:0.85rem;color:var(--muted)">
+              <div style="padding:10px 0;border-bottom:1px solid var(--border)">
+                <a href="https://omnidesq.com/blog/2026-06-13-the-hidden-cost-of-missed-calls-why-milwaukee-small-businesses-are-losing-customers.html" target="_blank" style="color:var(--white);text-decoration:none">The Hidden Cost of Missed Calls: Why Milwaukee Small Businesses Are Losing Customers</a>
+                <div style="font-size:0.72rem;color:var(--muted);margin-top:3px">June 13, 2026</div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
 
       <div class="tab-panel" id="tab-actions">
@@ -709,6 +757,87 @@
     btns.forEach(b => b.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
     btn.classList.add('active');
+  }
+
+  /* ── CONTENT GENERATOR ── */
+  const RAILWAY = 'https://aria-booking-server-production.up.railway.app';
+
+  async function generateContent() {
+    const topic = document.getElementById('blog-topic').value.trim();
+    if (!topic) { alert('Please enter a topic.'); return; }
+    const keywords = document.getElementById('blog-keywords').value.split(',').map(k => k.trim()).filter(Boolean);
+    const format = document.getElementById('video-format').value;
+    const btn = document.getElementById('generate-btn');
+    const status = document.getElementById('content-status');
+    const result = document.getElementById('content-result');
+    const videoResult = document.getElementById('video-result');
+
+    btn.disabled = true;
+    btn.textContent = 'Generating...';
+    status.style.display = 'block';
+    status.textContent = 'Writing blog post with Claude...';
+    result.style.display = 'none';
+    videoResult.style.display = 'none';
+
+    try {
+      // Blog post
+      const blogRes = await fetch(`${RAILWAY}/publish-blog`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic, keywords })
+      });
+      const blog = await blogRes.json();
+      if (blog.url) {
+        document.getElementById('blog-url').href = blog.url;
+        document.getElementById('blog-url').textContent = blog.url;
+        result.style.display = 'block';
+        status.textContent = 'Blog published. Rendering video...';
+      } else {
+        status.textContent = 'Blog error: ' + (blog.error || 'Unknown');
+        btn.disabled = false; btn.textContent = 'Generate Blog Post + Video';
+        return;
+      }
+
+      // Video
+      const videoRes = await fetch(`${RAILWAY}/render-video`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: topic, subtitle: 'omnidesq.com', caption: '#AI #SmallBusiness #Milwaukee', format })
+      });
+      const video = await videoRes.json();
+      if (video.renderId) {
+        videoResult.style.display = 'block';
+        status.textContent = 'Done. Video rendering in background.';
+        // Poll for video completion
+        pollVideo(video.renderId);
+      }
+    } catch(e) {
+      status.textContent = 'Error: ' + e.message;
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Generate Blog Post + Video';
+  }
+
+  async function pollVideo(id) {
+    let attempts = 0;
+    const interval = setInterval(async () => {
+      attempts++;
+      if (attempts > 20) { clearInterval(interval); return; }
+      try {
+        const r = await fetch(`${RAILWAY}/video-status/${id}`);
+        const data = await r.json();
+        if (data.status === 'done' && data.url) {
+          clearInterval(interval);
+          document.getElementById('video-status-text').textContent = 'Video ready!';
+          document.getElementById('video-url').href = data.url;
+          document.getElementById('video-url-wrap').style.display = 'block';
+        } else if (data.status === 'failed') {
+          clearInterval(interval);
+          document.getElementById('video-status-text').textContent = 'Video render failed.';
+        }
+      } catch { /* ignore */ }
+    }, 5000);
   }
 
   /* ── AUTO LOGIN FROM SESSION ── */
