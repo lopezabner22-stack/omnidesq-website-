@@ -694,7 +694,8 @@
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px">
             <div class="section-title" style="margin-bottom:16px">Connected Accounts</div>
             <div id="social-accounts" style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">Loading...</div>
-            <a href="#" onclick="connectMeta()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#1877f2;color:#fff;border-radius:8px;text-decoration:none;font-size:0.85rem;font-weight:600;cursor:pointer">Connect Facebook + Instagram</a>
+            <a href="#" onclick="connectMeta()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#1877f2;color:#fff;border-radius:8px;text-decoration:none;font-size:0.85rem;font-weight:600;cursor:pointer;margin-right:10px">Connect Facebook + Instagram</a>
+            <a href="#" onclick="connectTikTok()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#000;color:#fff;border-radius:8px;text-decoration:none;font-size:0.85rem;font-weight:600;cursor:pointer">Connect TikTok</a>
           </div>
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px">
             <div class="section-title" style="margin-bottom:12px">Recent Posts</div>
@@ -783,6 +784,10 @@
   const RAILWAY = 'https://aria-booking-server-production.up.railway.app';
 
   /* ── SOCIAL CONNECT ── */
+  function connectTikTok() {
+    window.location.href = `https://www.tiktok.com/v2/auth/authorize?client_key=awxapg4qunlvbiqw&redirect_uri=${encodeURIComponent('https://aria-booking-server-production.up.railway.app/social/tiktok/callback')}&response_type=code&scope=video.upload,video.publish&state=omnidesq`;
+  }
+
   function connectMeta() {
     window.location.href = 'https://www.facebook.com/v25.0/dialog/oauth?client_id=876781071510984&redirect_uri=https%3A%2F%2Faria-booking-server-production.up.railway.app%2Fsocial%2Fmeta%2Fcallback&scope=pages_show_list%2Cpages_read_engagement%2Cpages_manage_posts&response_type=code';
   }
