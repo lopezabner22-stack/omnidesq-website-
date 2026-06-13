@@ -657,6 +657,11 @@
               </div>
             </div>
           </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px">
+            <div class="section-title" style="margin-bottom:16px">Connected Accounts</div>
+            <div id="social-accounts" style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">Loading...</div>
+            <a id="connect-meta-btn" href="#" onclick="connectMeta()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#1877f2;color:#fff;border-radius:8px;text-decoration:none;font-size:0.85rem;font-weight:600;cursor:pointer">Connect Facebook + Instagram</a>
+          </div>
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px">
             <div class="section-title" style="margin-bottom:12px">Recent Posts</div>
             <div style="font-size:0.85rem;color:var(--muted)">
@@ -761,6 +766,32 @@
 
   /* ── CONTENT GENERATOR ── */
   const RAILWAY = 'https://aria-booking-server-production.up.railway.app';
+
+  /* ── SOCIAL CONNECT ── */
+  async function connectMeta() {
+    const r = await fetch(`${RAILWAY}/social/meta/auth-url`);
+    const data = await r.json();
+    if (data.url) window.open(data.url, '_blank', 'width=600,height=700');
+    setTimeout(loadSocialAccounts, 5000);
+  }
+
+  async function loadSocialAccounts() {
+    try {
+      const r = await fetch(`${RAILWAY}/social/accounts`);
+      const data = await r.json();
+      const el = document.getElementById('social-accounts');
+      if (!el) return;
+      if (data.meta?.connected) {
+        const pages = data.meta.pages.map(p => `<div style="padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--white);font-weight:600">${p.name}</span> ${p.igId ? '<span style="color:var(--green);font-size:0.75rem;margin-left:8px">+ Instagram</span>' : ''}</div>`).join('');
+        el.innerHTML = pages || '<span style="color:var(--green)">Connected</span>';
+      } else {
+        el.textContent = 'Not connected yet.';
+      }
+    } catch { }
+  }
+
+  // Load on content tab open
+  document.addEventListener('DOMContentLoaded', loadSocialAccounts);
 
   async function generateContent() {
     const topic = document.getElementById('blog-topic').value.trim();
