@@ -663,6 +663,11 @@
               <label style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Keywords (comma separated)</label>
               <input id="blog-keywords" type="text" placeholder="AI receptionist, Milwaukee, missed calls" style="width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.95rem;outline:none" />
             </div>
+            <div style="margin-bottom:16px">
+              <label style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Background Video URL (optional)</label>
+              <input id="video-bg-url" type="text" placeholder="https://your-video-clip.mp4 or leave blank for branded title card" style="width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.95rem;outline:none" />
+              <div style="font-size:0.72rem;color:var(--muted);margin-top:5px">Paste a public MP4 URL or leave blank. Blank = gold title card on dark background.</div>
+            </div>
             <div style="margin-bottom:20px">
               <label style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Video Format</label>
               <select id="video-format" style="width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.95rem;outline:none">
@@ -855,10 +860,11 @@
       }
 
       // Video
+      const bgUrl = document.getElementById('video-bg-url')?.value.trim() || null;
       const videoRes = await fetch(`${RAILWAY}/render-video`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: topic, subtitle: 'omnidesq.com', caption: '#AI #SmallBusiness #Milwaukee', format })
+        body: JSON.stringify({ title: topic, subtitle: 'omnidesq.com', caption: '#AI #SmallBusiness #Milwaukee', format, bgVideoUrl: bgUrl })
       });
       const video = await videoRes.json();
       if (video.renderId) {
