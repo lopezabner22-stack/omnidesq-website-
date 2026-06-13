@@ -779,10 +779,17 @@
 
   /* ── SOCIAL CONNECT ── */
   async function connectMeta() {
-    const r = await fetch(`${RAILWAY}/social/meta/auth-url`);
-    const data = await r.json();
-    if (data.url) window.open(data.url, '_blank', 'width=600,height=700');
-    setTimeout(loadSocialAccounts, 5000);
+    try {
+      const r = await fetch(`${RAILWAY}/social/meta/auth-url`);
+      const data = await r.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert('Error: ' + (data.error || 'Could not get auth URL'));
+      }
+    } catch(e) {
+      alert('Connection error: ' + e.message);
+    }
   }
 
   async function loadSocialAccounts() {
