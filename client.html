@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tiger Lily — Omnidesq Client Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0f0f0f;
+      --surface:  #1a1a1a;
+      --border:   #2a2a2a;
+      --gold:     #C9A84C;
+      --gold-dim: #a0832c;
+      --white:    #f0f0f0;
+      --muted:    #888;
+      --green:    #2ecc71;
+      --blue:     #3498db;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left { display: flex; align-items: baseline; gap: 14px; }
+    .logo { font-size: 1.3rem; font-weight: 700; color: var(--gold); letter-spacing: 0.06em; }
+    .header-client { font-size: 0.9rem; color: var(--muted); }
+    .header-client span { color: var(--white); font-weight: 600; }
+
+    .header-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--green);
+      background: rgba(46,204,113,0.1);
+      border: 1px solid rgba(46,204,113,0.25);
+      border-radius: 20px;
+      padding: 6px 14px;
+    }
+
+    .live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* WELCOME */
+    .welcome {
+      margin-bottom: 40px;
+    }
+
+    .welcome h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .welcome p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* STATS ROW */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: -0.02em;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .stat-sub {
+      font-size: 0.72rem;
+      color: var(--green);
+      margin-top: 4px;
+    }
+
+    /* SECTION */
+    .section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section { margin-bottom: 48px; }
+
+    /* AGENT CARD */
+    .agent-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .agent-avatar {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dim) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .agent-info h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .agent-info p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .agent-phone {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    .agent-phone:hover { text-decoration: underline; }
+
+    /* RECENT CALLS */
+    .calls-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .call-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .call-icon {
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .call-info { flex: 1; }
+
+    .call-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .call-detail {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .call-time {
+      font-size: 0.75rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .call-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .call-badge.booked {
+      background: rgba(46,204,113,0.12);
+      color: var(--green);
+      border: 1px solid rgba(46,204,113,0.25);
+    }
+
+    .call-badge.message {
+      background: rgba(52,152,219,0.12);
+      color: var(--blue);
+      border: 1px solid rgba(52,152,219,0.25);
+    }
+
+    .call-badge.missed {
+      background: rgba(231,76,60,0.12);
+      color: #e74c3c;
+      border: 1px solid rgba(231,76,60,0.25);
+    }
+
+    /* UPCOMING */
+    .appt-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .appt-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 10px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .appt-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .appt-service {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .appt-time {
+      font-size: 0.8rem;
+      color: var(--gold);
+      font-weight: 600;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    /* DEMO NOTICE */
+    .demo-notice {
+      background: rgba(201,168,76,0.07);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .demo-notice strong { color: var(--gold); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 40px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    footer span { color: var(--gold); }
+
+    @media (max-width: 600px) {
+      header { padding: 16px 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
+      main { padding: 24px 16px 60px; }
+      .agent-card { flex-direction: column; text-align: center; }
+      .call-item { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <div class="logo">Omnidesq</div>
+      <div class="header-client">Client: <span>Tiger Lily</span></div>
+    </div>
+    <div class="header-badge">
+      <div class="live-dot"></div>
+      Agent Live
+    </div>
+  </header>
+
+  <main>
+
+    <div class="demo-notice">
+      <strong>Demo View</strong> — This is a preview of your client portal. Live data will populate once your agent is active on your phone line.
+    </div>
+
+    <div class="welcome">
+      <h1>Good morning, Zoe 👋</h1>
+      <p>Here is how your AI receptionist performed this week.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val">12</div>
+        <div class="stat-label">Calls Answered</div>
+        <div class="stat-sub">↑ 4 from last week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">4</div>
+        <div class="stat-label">Appointments Booked</div>
+        <div class="stat-sub">This week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">0</div>
+        <div class="stat-label">Missed Calls</div>
+        <div class="stat-sub">Lily answered all</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">3m</div>
+        <div class="stat-label">Avg Call Length</div>
+        <div class="stat-sub">Efficient</div>
+      </div>
+    </div>
+
+    <!-- Your Agent -->
+    <section>
+      <div class="section-title">Your AI Receptionist</div>
+      <div class="agent-card">
+        <div class="agent-avatar">🌸</div>
+        <div class="agent-info">
+          <h3>Lily</h3>
+          <p>Answers calls 24/7, books appointments, takes messages when you are unavailable.</p>
+          <a class="agent-phone" href="tel:+14149667094">+1 (414) 966-7094</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Calls -->
+    <section>
+      <div class="section-title">Recent Calls</div>
+      <div class="calls-list">
+
+        <div class="call-item">
+          <div class="call-icon">📞</div>
+          <div class="call-info">
+            <div class="call-name">Sarah M.</div>
+            <div class="call-detail">Booked a lash appointment for Friday</div>
+          </div>
+          <span class="call-badge booked">Booked</span>
+          <div class="call-time">Today 9:14am</div>
+        </div>
+
+        <div class="call-item">
+          <div class="call-icon">📞</div>
+          <div class="call-info">
+            <div class="call-name">Unknown caller</div>
+            <div class="call-detail">Asked about brow tinting pricing, left contact info</div>
+          </div>
+          <span class="call-badge message">Message</span>
+          <div class="call-time">Yesterday 3:42pm</div>
+        </div>
+
+        <div class="call-item">
+          <div class="call-icon">📞</div>
+          <div class="call-info">
+            <div class="call-name">Maria R.</div>
+            <div class="call-detail">Booked a facial for Thursday at 11am</div>
+          </div>
+          <span class="call-badge booked">Booked</span>
+          <div class="call-time">Yesterday 1:05pm</div>
+        </div>
+
+        <div class="call-item">
+          <div class="call-icon">📞</div>
+          <div class="call-info">
+            <div class="call-name">Unknown caller</div>
+            <div class="call-detail">Called after hours — Lily took a message</div>
+          </div>
+          <span class="call-badge message">Message</span>
+          <div class="call-time">Mon 10:51pm</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Upcoming Appointments -->
+    <section>
+      <div class="section-title">Upcoming Appointments Booked by Lily</div>
+      <div class="appt-list">
+
+        <div class="appt-item">
+          <div>
+            <div class="appt-name">Sarah M.</div>
+            <div class="appt-service">Lash Full Set</div>
+          </div>
+          <div class="appt-time">Fri Jun 20 · 2:00 PM</div>
+        </div>
+
+        <div class="appt-item">
+          <div>
+            <div class="appt-name">Maria R.</div>
+            <div class="appt-service">Signature Facial</div>
+          </div>
+          <div class="appt-time">Thu Jun 19 · 11:00 AM</div>
+        </div>
+
+        <div class="appt-item">
+          <div>
+            <div class="appt-name">Jessica T.</div>
+            <div class="appt-service">Brow Lamination</div>
+          </div>
+          <div class="appt-time">Wed Jun 18 · 3:30 PM</div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    Powered by <span>Omnidesq</span> — AI Receptionist for Growing Businesses
+  </footer>
+
+</body>
+</html>
