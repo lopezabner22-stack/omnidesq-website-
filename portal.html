@@ -797,7 +797,10 @@
       } else {
         el.textContent = 'Not connected yet.';
       }
-    } catch { }
+    } catch { 
+      const el = document.getElementById('social-accounts');
+      if (el) el.textContent = 'Not connected yet.';
+    }
   }
 
   // Load on content tab open
