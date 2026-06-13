@@ -778,18 +778,8 @@
   const RAILWAY = 'https://aria-booking-server-production.up.railway.app';
 
   /* ── SOCIAL CONNECT ── */
-  async function connectMeta() {
-    try {
-      const r = await fetch(`${RAILWAY}/social/meta/auth-url`);
-      const data = await r.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert('Error: ' + (data.error || 'Could not get auth URL'));
-      }
-    } catch(e) {
-      alert('Connection error: ' + e.message);
-    }
+  function connectMeta() {
+    window.location.href = 'https://www.facebook.com/v25.0/dialog/oauth?client_id=876781071510984&redirect_uri=https%3A%2F%2Faria-booking-server-production.up.railway.app%2Fsocial%2Fmeta%2Fcallback&scope=pages_manage_posts%2Cpages_read_engagement%2Cinstagram_basic%2Cinstagram_content_publish%2Cpages_show_list&response_type=code';
   }
 
   async function loadSocialAccounts() {
