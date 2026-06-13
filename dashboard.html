@@ -347,6 +347,175 @@
       text-transform: uppercase;
     }
 
+    /* ── TABS ── */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+
+    .tab-btn {
+      padding: 12px 24px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      margin-bottom: -1px;
+    }
+
+    .tab-btn:hover { color: var(--white); }
+    .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── MARKETING VIEW ── */
+    .mrr-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .mrr-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 24px;
+      text-align: center;
+    }
+
+    .mrr-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: -0.02em;
+    }
+
+    .mrr-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .client-marketing-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .cm-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .cm-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .cm-price {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gold);
+    }
+
+    .cm-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .cm-metric {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      text-align: center;
+    }
+
+    .cm-metric-val {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .cm-metric-lbl {
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-top: 2px;
+    }
+
+    .cm-status {
+      font-size: 0.78rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cm-status-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      margin-right: 6px;
+    }
+
+    .cm-status-dot.pending { background: var(--gold); }
+    .cm-status-dot.inactive { background: var(--gray); }
+
+    .action-items {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .action-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.85rem;
+    }
+
+    .action-item .ai-label {
+      font-weight: 600;
+      color: var(--white);
+      min-width: 140px;
+    }
+
+    .action-item .ai-detail {
+      color: var(--muted);
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 600px) {
       header { padding: 20px; flex-direction: column; gap: 4px; }
@@ -380,6 +549,16 @@
     </header>
 
     <main>
+
+      <!-- TAB BAR -->
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('agents', this)">Phone Agents</button>
+        <button class="tab-btn" onclick="switchTab('marketing', this)">Marketing</button>
+        <button class="tab-btn" onclick="switchTab('pipeline', this)">Pipeline</button>
+      </div>
+
+      <!-- TAB: AGENTS -->
+      <div class="tab-panel active" id="tab-agents">
 
       <!-- SECTION 1: Active Phone Agents -->
       <section>
@@ -449,6 +628,124 @@
         </div>
       </section>
 
+      </div><!-- /tab-agents -->
+
+      <!-- TAB: MARKETING -->
+      <div class="tab-panel" id="tab-marketing">
+
+        <!-- MRR Summary -->
+        <div class="mrr-bar">
+          <div class="mrr-card">
+            <div class="mrr-value">$0</div>
+            <div class="mrr-label">MRR</div>
+          </div>
+          <div class="mrr-card">
+            <div class="mrr-value">6</div>
+            <div class="mrr-label">Agents Live</div>
+          </div>
+          <div class="mrr-card">
+            <div class="mrr-value">5</div>
+            <div class="mrr-label">Active Leads</div>
+          </div>
+          <div class="mrr-card">
+            <div class="mrr-value">$1,298</div>
+            <div class="mrr-label">Pipeline Value</div>
+          </div>
+        </div>
+
+        <!-- Client Marketing Cards -->
+        <section>
+          <div class="section-title">Client Performance</div>
+
+          <div class="client-marketing-card">
+            <div class="cm-header">
+              <div class="cm-name">Tiger Lily</div>
+              <div class="cm-price">$249/mo + $99 setup</div>
+            </div>
+            <div class="cm-metrics">
+              <div class="cm-metric"><div class="cm-metric-val">—</div><div class="cm-metric-lbl">Calls Answered</div></div>
+              <div class="cm-metric"><div class="cm-metric-val">—</div><div class="cm-metric-lbl">Appts Booked</div></div>
+              <div class="cm-metric"><div class="cm-metric-val">—</div><div class="cm-metric-lbl">Missed Calls</div></div>
+              <div class="cm-metric"><div class="cm-metric-val">Lily</div><div class="cm-metric-lbl">Agent</div></div>
+            </div>
+            <div class="cm-status">
+              <span><span class="cm-status-dot pending"></span>Demo pending — Zoe wants demo before signing</span>
+              <span>+1 (414) 966-7094</span>
+            </div>
+          </div>
+
+          <div class="client-marketing-card">
+            <div class="cm-header">
+              <div class="cm-name">Patricia Mejia Law</div>
+              <div class="cm-price">$125/mo</div>
+            </div>
+            <div class="cm-metrics">
+              <div class="cm-metric"><div class="cm-metric-val">—</div><div class="cm-metric-lbl">Calls Answered</div></div>
+              <div class="cm-metric"><div class="cm-metric-val">—</div><div class="cm-metric-lbl">Consults Booked</div></div>
+              <div class="cm-metric"><div class="cm-metric-val">—</div><div class="cm-metric-lbl">Missed Calls</div></div>
+              <div class="cm-metric"><div class="cm-metric-val">Max</div><div class="cm-metric-lbl">Agent</div></div>
+            </div>
+            <div class="cm-status">
+              <span><span class="cm-status-dot pending"></span>Verbally agreed $125/mo — awaiting payment</span>
+              <span>patricia@lawmejia.com</span>
+            </div>
+          </div>
+
+          <div class="client-marketing-card">
+            <div class="cm-header">
+              <div class="cm-name">Desert Coats Painting</div>
+              <div class="cm-price">$125/mo</div>
+            </div>
+            <div class="cm-metrics">
+              <div class="cm-metric"><div class="cm-metric-val">—</div><div class="cm-metric-lbl">Calls Answered</div></div>
+              <div class="cm-metric"><div class="cm-metric-val">—</div><div class="cm-metric-lbl">Leads Captured</div></div>
+              <div class="cm-metric"><div class="cm-metric-val">—</div><div class="cm-metric-lbl">Missed Calls</div></div>
+              <div class="cm-metric"><div class="cm-metric-val">Max</div><div class="cm-metric-lbl">Agent</div></div>
+            </div>
+            <div class="cm-status">
+              <span><span class="cm-status-dot pending"></span>Proposal sent June 5 — confirm receipt</span>
+              <span>jaredluribe@gmail.com</span>
+            </div>
+          </div>
+
+          <div class="client-marketing-card">
+            <div class="cm-header">
+              <div class="cm-name">MKE Aesthetics</div>
+              <div class="cm-price">Trial Active</div>
+            </div>
+            <div class="cm-metrics">
+              <div class="cm-metric"><div class="cm-metric-val">—</div><div class="cm-metric-lbl">Calls Answered</div></div>
+              <div class="cm-metric"><div class="cm-metric-val">—</div><div class="cm-metric-lbl">Appts Booked</div></div>
+              <div class="cm-metric"><div class="cm-metric-val">—</div><div class="cm-metric-lbl">GHL Leads</div></div>
+              <div class="cm-metric"><div class="cm-metric-val">Jess</div><div class="cm-metric-lbl">Agent</div></div>
+            </div>
+            <div class="cm-status">
+              <span><span class="cm-status-dot"></span>NDA + BAA signed — awaiting AestheticsPro access</span>
+              <span>+1 (414) 261-5402</span>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- Action Items -->
+        <section>
+          <div class="section-title">Action Items</div>
+          <div class="action-items">
+            <div class="action-item"><span class="ai-label">Text Zoe</span><span class="ai-detail">Schedule Tiger Lily demo — she reached out first</span></div>
+            <div class="action-item"><span class="ai-label">Text Patricia</span><span class="ai-detail">Follow up on payment — verbally agreed $125/mo</span></div>
+            <div class="action-item"><span class="ai-label">Text Jared</span><span class="ai-detail">Confirm he received June 5 proposal email</span></div>
+            <div class="action-item"><span class="ai-label">Twilio SMS</span><span class="ai-detail">Day 54 — open support ticket at twilio.com immediately</span></div>
+            <div class="action-item"><span class="ai-label">6 Outreach Emails</span><span class="ai-detail">Capitol Family Dental, Oakfield, MKE Dental Arts, Aesthetics 360, EvolvMD, RemedyNow</span></div>
+            <div class="action-item"><span class="ai-label">Housecall Pro</span><span class="ai-detail">Email apideveloper@housecallpro.com — 5 sentences</span></div>
+            <div class="action-item"><span class="ai-label">BVM Partnership</span><span class="ai-detail">Review contract IP clauses first, then approach your contact</span></div>
+          </div>
+        </section>
+
+      </div><!-- /tab-marketing -->
+
+      <!-- TAB: PIPELINE (moved here) -->
+      <div class="tab-panel" id="tab-pipeline">
+
       <!-- SECTION 2: Pipeline -->
       <section>
         <div class="section-title">Pipeline</div>
@@ -502,6 +799,11 @@
         </div>
       </section>
 
+      </div><!-- /tab-pipeline -->
+
+      <!-- Always visible: Quick Links + Twilio -->
+      <div>
+
       <!-- SECTION 3: Quick Links -->
       <section>
         <div class="section-title">Quick Links</div>
@@ -536,10 +838,19 @@
         </div>
       </section>
 
+      </div><!-- /always-visible -->
+
     </main>
   </div>
 
   <script>
+    function switchTab(name, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      btn.classList.add('active');
+    }
+
     const PASSWORD = 'omnidesq2026';
     const SESSION_KEY = 'omnidesq_auth';
 
