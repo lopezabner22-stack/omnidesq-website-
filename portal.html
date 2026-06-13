@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Omnidesq Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0f0f0f;
+      --surface:  #1a1a1a;
+      --border:   #2a2a2a;
+      --gold:     #C9A84C;
+      --gold-dim: #a0832c;
+      --white:    #f0f0f0;
+      --muted:    #888;
+      --green:    #2ecc71;
+      --blue:     #3498db;
+      --red:      #e74c3c;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN ── */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .login-logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .login-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-bottom: 36px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .field-input {
+      width: 100%;
+      padding: 13px 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      margin-bottom: 18px;
+      transition: border-color 0.2s;
+    }
+
+    .field-input:focus { border-color: var(--gold); }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: background 0.2s;
+      margin-top: 4px;
+    }
+
+    .login-btn:hover { background: var(--gold-dim); }
+
+    .login-error {
+      color: var(--red);
+      font-size: 0.82rem;
+      margin-top: 12px;
+      text-align: center;
+      display: none;
+    }
+
+    /* ── PORTAL ── */
+    #portal { display: none; }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left { display: flex; align-items: baseline; gap: 14px; }
+    .logo { font-size: 1.4rem; font-weight: 700; color: var(--gold); letter-spacing: 0.06em; }
+    .header-account { font-size: 0.85rem; color: var(--muted); }
+    .header-account span { color: var(--white); font-weight: 600; }
+
+    .header-right { display: flex; align-items: center; gap: 16px; }
+
+    .live-badge {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 0.75rem; font-weight: 600;
+      color: var(--green);
+      background: rgba(46,204,113,0.1);
+      border: 1px solid rgba(46,204,113,0.25);
+      border-radius: 20px;
+      padding: 5px 12px;
+    }
+
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .logout-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .logout-btn:hover { color: var(--white); border-color: var(--white); }
+
+    main { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* ── TABS ── */
+    .tab-bar {
+      display: flex; gap: 4px;
+      margin-bottom: 36px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab-btn {
+      padding: 11px 22px;
+      background: none; border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      cursor: pointer; margin-bottom: -1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .tab-btn:hover { color: var(--white); }
+    .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── SECTION ── */
+    .section-title {
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+      padding-bottom: 10px; border-bottom: 1px solid var(--border);
+    }
+
+    section { margin-bottom: 44px; }
+
+    /* ── STATS ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 14px; margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px; text-align: center;
+    }
+
+    .stat-val { font-size: 2rem; font-weight: 700; color: var(--gold); letter-spacing: -0.02em; }
+    .stat-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+    .stat-sub { font-size: 0.7rem; color: var(--green); margin-top: 4px; }
+
+    /* ── AGENT CARDS ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 14px;
+    }
+
+    .agent-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 22px;
+      transition: border-color 0.2s;
+    }
+
+    .agent-card:hover { border-color: var(--gold); }
+
+    .ac-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .ac-name { font-size: 0.95rem; font-weight: 600; }
+
+    .badge { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; }
+    .badge-live { background: rgba(46,204,113,0.12); color: var(--green); border: 1px solid rgba(46,204,113,0.28); }
+    .badge-trial { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid rgba(201,168,76,0.28); }
+    .badge-pending { background: rgba(100,100,100,0.2); color: #aaa; border: 1px solid #444; }
+    .badge-demo { background: rgba(52,152,219,0.12); color: var(--blue); border: 1px solid rgba(52,152,219,0.28); }
+
+    .ac-agent { font-size: 0.78rem; color: var(--muted); margin-bottom: 6px; }
+    .ac-agent span { color: var(--white); }
+    .ac-phone a { font-size: 0.92rem; color: var(--gold); text-decoration: none; font-weight: 500; }
+    .ac-phone a:hover { text-decoration: underline; }
+    .ac-notes { margin-top: 10px; font-size: 0.75rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 9px; }
+
+    /* ── PIPELINE ── */
+    .pipeline-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .pipeline-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 15px 18px;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+
+    .p-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); margin-top: 6px; flex-shrink: 0; }
+    .p-name { font-weight: 600; font-size: 0.88rem; margin-bottom: 2px; }
+    .p-detail { font-size: 0.78rem; color: var(--muted); }
+    .p-value { margin-left: auto; font-size: 0.8rem; font-weight: 600; color: var(--gold); white-space: nowrap; flex-shrink: 0; }
+
+    /* ── ACTION ITEMS ── */
+    .action-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .action-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--gold); border-radius: 8px;
+      padding: 13px 18px; display: flex; align-items: center; gap: 14px; font-size: 0.84rem;
+    }
+
+    .ai-label { font-weight: 600; color: var(--white); min-width: 150px; }
+    .ai-detail { color: var(--muted); }
+
+    /* ── CALLS ── */
+    .calls-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .call-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 13px 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    .call-info { flex: 1; }
+    .call-name { font-size: 0.88rem; font-weight: 600; }
+    .call-detail { font-size: 0.76rem; color: var(--muted); margin-top: 2px; }
+    .call-time { font-size: 0.73rem; color: var(--muted); white-space: nowrap; }
+
+    .cbadge { font-size: 0.65rem; font-weight: 700; padding: 3px 9px; border-radius: 20px; }
+    .cbadge-booked { background: rgba(46,204,113,0.12); color: var(--green); border: 1px solid rgba(46,204,113,0.25); }
+    .cbadge-message { background: rgba(52,152,219,0.12); color: var(--blue); border: 1px solid rgba(52,152,219,0.25); }
+
+    /* ── APPTS ── */
+    .appt-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .appt-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--gold); border-radius: 10px;
+      padding: 13px 18px; display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    }
+
+    .appt-name { font-size: 0.88rem; font-weight: 600; }
+    .appt-service { font-size: 0.76rem; color: var(--muted); margin-top: 2px; }
+    .appt-time { font-size: 0.78rem; color: var(--gold); font-weight: 600; white-space: nowrap; text-align: right; }
+
+    /* ── AGENT HERO ── */
+    .agent-hero {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 24px;
+      display: flex; align-items: center; gap: 22px;
+    }
+
+    .agent-avatar {
+      width: 58px; height: 58px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+    }
+
+    .agent-hero h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+    .agent-hero p { font-size: 0.83rem; color: var(--muted); margin-bottom: 8px; }
+    .agent-phone { font-size: 0.95rem; font-weight: 600; color: var(--gold); text-decoration: none; }
+    .agent-phone:hover { text-decoration: underline; }
+
+    /* ── LINKS ── */
+    .links-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .quick-link {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 18px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 8px;
+      color: var(--white); text-decoration: none;
+      font-size: 0.82rem; font-weight: 500;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .quick-link:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── TWILIO BANNER ── */
+    .twilio-banner {
+      background: rgba(201,168,76,0.07);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-left: 4px solid var(--gold);
+      border-radius: 10px; padding: 16px 20px;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+
+    .twilio-text { font-size: 0.84rem; color: #ccc; line-height: 1.6; }
+    .twilio-text strong { color: var(--gold); display: block; font-size: 0.76rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 3px; }
+
+    /* ── WELCOME ── */
+    .welcome { margin-bottom: 36px; }
+    .welcome h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 5px; }
+    .welcome p { font-size: 0.88rem; color: var(--muted); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      header { padding: 16px 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
+      main { padding: 24px 16px 60px; }
+      .login-box { padding: 36px 24px; }
+      .agent-hero { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Omnidesq</div>
+    <div class="login-sub">Sign in to your portal</div>
+    <label class="field-label" for="email-input">Email</label>
+    <input class="field-input" type="email" id="email-input" placeholder="you@example.com" autocomplete="email" />
+    <label class="field-label" for="pw-input">Password</label>
+    <input class="field-input" type="password" id="pw-input" placeholder="Password" autocomplete="current-password" />
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="login-error" id="login-error">Invalid email or password.</div>
+  </div>
+</div>
+
+<!-- PORTAL -->
+<div id="portal">
+  <header>
+    <div class="header-left">
+      <div class="logo">Omnidesq</div>
+      <div class="header-account" id="header-account"></div>
+    </div>
+    <div class="header-right">
+      <div class="live-badge"><div class="live-dot"></div>Live</div>
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </header>
+
+  <main id="portal-main"></main>
+</div>
+
+<script>
+  /* ── ACCOUNTS ── */
+  const ACCOUNTS = {
+    'abner@omnidesq.com': { password: 'omnidesq2026', role: 'admin', name: 'Abner' },
+    'zoe@tigerlily.com':  { password: 'tigerlily2026', role: 'client', name: 'Zoe', client: 'tiger-lily' },
+    'patricia@lawmejia.com': { password: 'lawmejia2026', role: 'client', name: 'Patricia', client: 'patricia' },
+    'jaredluribe@gmail.com': { password: 'desertcoats2026', role: 'client', name: 'Jared', client: 'jared' },
+    'ashley@mkeaesthetics.com': { password: 'mkeaesthetics2026', role: 'client', name: 'Ashley', client: 'mke' },
+  };
+
+  /* ── CLIENT DATA ── */
+  const CLIENTS = {
+    'tiger-lily': {
+      name: 'Tiger Lily',
+      agent: 'Lily',
+      emoji: '🌸',
+      phone: '+14149667094',
+      phoneDisplay: '+1 (414) 966-7094',
+      plan: '$249/mo + $99 setup',
+      stats: [
+        { val: '12', label: 'Calls Answered', sub: '↑ 4 from last week' },
+        { val: '4',  label: 'Appts Booked',   sub: 'This week' },
+        { val: '0',  label: 'Missed Calls',    sub: 'Lily answered all' },
+        { val: '3m', label: 'Avg Call Length', sub: 'Efficient' },
+      ],
+      calls: [
+        { name: 'Sarah M.',      detail: 'Booked a lash appointment for Friday',    badge: 'booked',  time: 'Today 9:14am' },
+        { name: 'Unknown caller',detail: 'Asked about brow tinting, left contact',  badge: 'message', time: 'Yesterday 3:42pm' },
+        { name: 'Maria R.',      detail: 'Booked a facial for Thursday at 11am',    badge: 'booked',  time: 'Yesterday 1:05pm' },
+        { name: 'Unknown caller',detail: 'Called after hours — Lily took a message',badge: 'message', time: 'Mon 10:51pm' },
+      ],
+      appts: [
+        { name: 'Sarah M.',   service: 'Lash Full Set',     time: 'Fri Jun 20 · 2:00 PM' },
+        { name: 'Maria R.',   service: 'Signature Facial',  time: 'Thu Jun 19 · 11:00 AM' },
+        { name: 'Jessica T.', service: 'Brow Lamination',   time: 'Wed Jun 18 · 3:30 PM' },
+      ],
+    },
+    'patricia': {
+      name: 'Law Office of Patricia Mejia',
+      agent: 'Max',
+      emoji: '⚖️',
+      phone: '+14148159423',
+      phoneDisplay: '+1 (414) 815-9423',
+      plan: '$125/mo',
+      stats: [
+        { val: '8',  label: 'Calls Answered', sub: 'This week' },
+        { val: '2',  label: 'Consults Booked', sub: 'This week' },
+        { val: '0',  label: 'Missed Calls',    sub: 'Max answered all' },
+        { val: '4m', label: 'Avg Call Length', sub: '' },
+      ],
+      calls: [
+        { name: 'Carlos V.',    detail: 'Booked immigration consultation Monday', badge: 'booked',  time: 'Today 10:20am' },
+        { name: 'Unknown caller',detail: 'Asked about DACA renewal, left contact', badge: 'message', time: 'Yesterday 2:10pm' },
+      ],
+      appts: [
+        { name: 'Carlos V.',  service: 'Immigration Consultation', time: 'Mon Jun 16 · 10:00 AM' },
+        { name: 'Ana Torres', service: 'Family Petition Review',   time: 'Tue Jun 17 · 2:00 PM' },
+      ],
+    },
+    'jared': {
+      name: 'Desert Coats Painting',
+      agent: 'Max',
+      emoji: '🎨',
+      phone: '+14148159423',
+      phoneDisplay: '+1 (414) 815-9423',
+      plan: '$125/mo',
+      stats: [
+        { val: '6',  label: 'Calls Answered', sub: 'This week' },
+        { val: '3',  label: 'Quotes Requested', sub: 'New leads' },
+        { val: '0',  label: 'Missed Calls',    sub: 'Max answered all' },
+        { val: '5m', label: 'Avg Call Length', sub: '' },
+      ],
+      calls: [
+        { name: 'Mike H.',       detail: 'Requested exterior quote, booked walkthrough', badge: 'booked',  time: 'Today 8:45am' },
+        { name: 'Unknown caller',detail: 'Asked about interior pricing, left contact',   badge: 'message', time: 'Yesterday 11:30am' },
+      ],
+      appts: [
+        { name: 'Mike H.',    service: 'Exterior Quote Walkthrough', time: 'Wed Jun 18 · 9:00 AM' },
+        { name: 'Lisa Park',  service: 'Interior Estimate',          time: 'Thu Jun 19 · 1:00 PM' },
+      ],
+    },
+    'mke': {
+      name: 'MKE Aesthetics',
+      agent: 'Jess',
+      emoji: '✨',
+      phone: '+14142615402',
+      phoneDisplay: '+1 (414) 261-5402',
+      plan: 'Active Trial',
+      stats: [
+        { val: '9',  label: 'Calls Answered', sub: 'This week' },
+        { val: '3',  label: 'Appts Booked',   sub: 'This week' },
+        { val: '1',  label: 'After Hours',     sub: 'Captured after close' },
+        { val: '4m', label: 'Avg Call Length', sub: '' },
+      ],
+      calls: [
+        { name: 'Jennifer M.', detail: 'Booked Botox consultation Tuesday',       badge: 'booked',  time: 'Today 9:55am' },
+        { name: 'Unknown caller',detail: 'Asked about lip filler pricing, message left', badge: 'message', time: 'Yesterday 6:10pm' },
+      ],
+      appts: [
+        { name: 'Jennifer M.', service: 'Botox Consultation', time: 'Tue Jun 17 · 11:00 AM' },
+        { name: 'Rachel S.',   service: 'Lip Filler',         time: 'Wed Jun 18 · 2:30 PM' },
+      ],
+    },
+  };
+
+  /* ── LOGIN ── */
+  let currentUser = null;
+
+  function doLogin() {
+    const email = document.getElementById('email-input').value.trim().toLowerCase();
+    const pw    = document.getElementById('pw-input').value;
+    const acct  = ACCOUNTS[email];
+    if (acct && acct.password === pw) {
+      currentUser = { email, ...acct };
+      sessionStorage.setItem('portal_user', JSON.stringify(currentUser));
+      showPortal();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+    }
+  }
+
+  function doLogout() {
+    sessionStorage.removeItem('portal_user');
+    currentUser = null;
+    document.getElementById('portal').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('email-input').value = '';
+  }
+
+  document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('email-input').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('pw-input').focus(); });
+
+  /* ── RENDER ── */
+  function showPortal() {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('portal').style.display = 'block';
+    const acct = document.getElementById('header-account');
+    acct.innerHTML = currentUser.role === 'admin'
+      ? `Signed in as <span>${currentUser.name} (Admin)</span>`
+      : `Client: <span>${currentUser.name}</span>`;
+    renderMain();
+  }
+
+  function renderMain() {
+    const el = document.getElementById('portal-main');
+    el.innerHTML = currentUser.role === 'admin' ? renderAdmin() : renderClient(CLIENTS[currentUser.client]);
+    // activate first tab
+    const firstBtn = el.querySelector('.tab-btn');
+    if (firstBtn) firstBtn.click();
+  }
+
+  /* ── ADMIN VIEW ── */
+  function renderAdmin() {
+    return `
+      <div class="tab-bar">
+        <button class="tab-btn" onclick="switchTab('overview',this)">Overview</button>
+        <button class="tab-btn" onclick="switchTab('agents',this)">Phone Agents</button>
+        <button class="tab-btn" onclick="switchTab('pipeline',this)">Pipeline</button>
+        <button class="tab-btn" onclick="switchTab('actions',this)">Action Items</button>
+      </div>
+
+      <div class="tab-panel" id="tab-overview">
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-val">$0</div><div class="stat-label">MRR</div><div class="stat-sub">First client closes it</div></div>
+          <div class="stat-card"><div class="stat-val">6</div><div class="stat-label">Agents Live</div></div>
+          <div class="stat-card"><div class="stat-val">5</div><div class="stat-label">Active Leads</div></div>
+          <div class="stat-card"><div class="stat-val">$1,298</div><div class="stat-label">Pipeline Value/mo</div></div>
+        </div>
+        <section>
+          <div class="section-title">Quick Links</div>
+          <div class="links-grid">
+            <a class="quick-link" href="https://docs.google.com/spreadsheets/d/1BbrrVTSoa8XdP0U_Yw1Ltutwm2zGZCBRdTcPs8aI6sY" target="_blank">📊 CRM Sheet</a>
+            <a class="quick-link" href="https://aria-booking-server-production.up.railway.app/health" target="_blank">🚂 Railway Server</a>
+            <a class="quick-link" href="https://app.vapi.ai" target="_blank">🎙️ Vapi Dashboard</a>
+            <a class="quick-link" href="https://docs.google.com/spreadsheets/d/10f1Kr0yyJZ-W4puhW58yuAvnvCOa9RKAR8s3A_Al_K8" target="_blank">📋 Onboarding Template</a>
+          </div>
+        </section>
+        <section>
+          <div class="section-title">SMS Status</div>
+          <div class="twilio-banner">
+            <div class="twilio-text"><strong>Twilio A2P SMS — Under Review</strong>Submitted April 20, 2026. Day 54. SMS blocked on all numbers. Open support ticket at twilio.com immediately.</div>
+          </div>
+        </section>
+      </div>
+
+      <div class="tab-panel" id="tab-agents">
+        <div class="card-grid">
+          ${[
+            { name:'Omnidesq Main', agent:'Max', phone:'+14148159423', display:'+1 (414) 815-9423', badge:'badge-live', status:'Live', notes:'Business card number, books demos' },
+            { name:'Sunny Smiles Dental', agent:'Aria', phone:'+14142693678', display:'+1 (414) 269-3678', badge:'badge-live', status:'Live', notes:'Dental demo' },
+            { name:'Neroli Salon', agent:'Jessica', phone:'+14144412429', display:'+1 (414) 441-2429', badge:'badge-live', status:'Live', notes:'Salon demo' },
+            { name:'MKE Aesthetics', agent:'Jess', phone:'+14142615402', display:'+1 (414) 261-5402', badge:'badge-trial', status:'Trial', notes:'Awaiting AestheticsPro integration' },
+            { name:'H2O Health', agent:'H2O Aria', phone:'+14146778814', display:'+1 (414) 677-8814', badge:'badge-pending', status:'Pending', notes:'Merger delay — follow up August 2026' },
+            { name:'Tiger Lily', agent:'Lily', phone:'+14149667094', display:'+1 (414) 966-7094', badge:'badge-demo', status:'Demo Ready', notes:'Zoe demo pending' },
+          ].map(c => `
+            <div class="agent-card">
+              <div class="ac-header"><div class="ac-name">${c.name}</div><span class="badge ${c.badge}">${c.status}</span></div>
+              <div class="ac-agent">Agent: <span>${c.agent}</span></div>
+              <div class="ac-phone"><a href="tel:${c.phone}">${c.display}</a></div>
+              <div class="ac-notes">${c.notes}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-pipeline">
+        <div class="pipeline-list">
+          ${[
+            { name:'Zoe / Tiger Lily', detail:'Demo pending', value:'$249/mo + $99 setup' },
+            { name:'Patricia Mejia', detail:'Verbally agreed, awaiting payment', value:'$125/mo' },
+            { name:'Jared Uribe / Desert Coats', detail:'Proposal sent June 5', value:'$125/mo' },
+            { name:'MKE Aesthetics / Dr. B', detail:'NDA + BAA signed, trial active', value:'Active' },
+            { name:'H2O Health / Brooke', detail:'Follow up August 2026', value:'$700/mo' },
+          ].map(p => `
+            <div class="pipeline-item">
+              <div class="p-dot"></div>
+              <div><div class="p-name">${p.name}</div><div class="p-detail">${p.detail}</div></div>
+              <div class="p-value">${p.value}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-actions">
+        <div class="action-list">
+          ${[
+            { label:'Text Zoe', detail:'Schedule Tiger Lily demo — she reached out first' },
+            { label:'Text Patricia', detail:'Follow up on payment — verbally agreed $125/mo' },
+            { label:'Text Jared', detail:'Confirm he received June 5 proposal email' },
+            { label:'Twilio SMS', detail:'Day 54 — open support ticket at twilio.com now' },
+            { label:'6 Outreach Emails', detail:'Capitol Family Dental, Oakfield, MKE Dental Arts, Aesthetics 360, EvolvMD, RemedyNow' },
+            { label:'Housecall Pro', detail:'Email apideveloper@housecallpro.com — 5 sentences' },
+            { label:'BVM Partnership', detail:'Review contract IP clauses first, then approach your contact' },
+            { label:'AestheticsPro', detail:'Follow up with Denise — June 25' },
+          ].map(a => `
+            <div class="action-item">
+              <span class="ai-label">${a.label}</span>
+              <span class="ai-detail">${a.detail}</span>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  /* ── CLIENT VIEW ── */
+  function renderClient(c) {
+    return `
+      <div class="welcome">
+        <h1>Welcome back, ${currentUser.name} 👋</h1>
+        <p>Here is how ${c.name} is performing this week.</p>
+      </div>
+
+      <div class="stats-row">
+        ${c.stats.map(s => `
+          <div class="stat-card">
+            <div class="stat-val">${s.val}</div>
+            <div class="stat-label">${s.label}</div>
+            ${s.sub ? `<div class="stat-sub">${s.sub}</div>` : ''}
+          </div>`).join('')}
+      </div>
+
+      <section>
+        <div class="section-title">Your AI Receptionist</div>
+        <div class="agent-hero">
+          <div class="agent-avatar">${c.emoji}</div>
+          <div>
+            <h3>${c.agent}</h3>
+            <p>Answers calls 24/7, books appointments, takes messages when you are unavailable.</p>
+            <a class="agent-phone" href="tel:${c.phone}">${c.phoneDisplay}</a>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">Recent Calls</div>
+        <div class="calls-list">
+          ${c.calls.map(call => `
+            <div class="call-item">
+              <div style="font-size:1rem">📞</div>
+              <div class="call-info">
+                <div class="call-name">${call.name}</div>
+                <div class="call-detail">${call.detail}</div>
+              </div>
+              <span class="cbadge cbadge-${call.badge}">${call.badge === 'booked' ? 'Booked' : 'Message'}</span>
+              <div class="call-time">${call.time}</div>
+            </div>`).join('')}
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">Upcoming Appointments Booked by ${c.agent}</div>
+        <div class="appt-list">
+          ${c.appts.map(a => `
+            <div class="appt-item">
+              <div>
+                <div class="appt-name">${a.name}</div>
+                <div class="appt-service">${a.service}</div>
+              </div>
+              <div class="appt-time">${a.time}</div>
+            </div>`).join('')}
+        </div>
+      </section>`;
+  }
+
+  /* ── TAB SWITCHING ── */
+  function switchTab(name, btn) {
+    const panels = document.querySelectorAll('.tab-panel');
+    const btns   = document.querySelectorAll('.tab-btn');
+    panels.forEach(p => p.classList.remove('active'));
+    btns.forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  /* ── AUTO LOGIN FROM SESSION ── */
+  const saved = sessionStorage.getItem('portal_user');
+  if (saved) {
+    currentUser = JSON.parse(saved);
+    showPortal();
+  }
+</script>
+</body>
+</html>
