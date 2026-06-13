@@ -568,8 +568,8 @@
         <button class="tab-btn" onclick="switchTab('overview',this)">Overview</button>
         <button class="tab-btn" onclick="switchTab('agents',this)">Phone Agents</button>
         <button class="tab-btn" onclick="switchTab('pipeline',this)">Pipeline</button>
-        <button class="tab-btn" onclick="switchTab('actions',this)">Action Items</button>
         <button class="tab-btn" onclick="switchTab('content',this)">Content</button>
+        <button class="tab-btn" onclick="switchTab('actions',this)">Action Items</button>
       </div>
 
       <div class="tab-panel" id="tab-overview">
@@ -632,26 +632,45 @@
         </div>
       </div>
 
+      <div class="tab-panel" id="tab-actions">
+        <div class="action-list">
+          ${[
+            { label:'Text Zoe', detail:'Schedule Tiger Lily demo — she reached out first' },
+            { label:'Text Patricia', detail:'Follow up on payment — verbally agreed $125/mo' },
+            { label:'Text Jared', detail:'Confirm he received June 5 proposal email' },
+            { label:'Twilio SMS', detail:'Day 54 — open support ticket at twilio.com now' },
+            { label:'6 Outreach Emails', detail:'Capitol Family Dental, Oakfield, MKE Dental Arts, Aesthetics 360, EvolvMD, RemedyNow' },
+            { label:'Housecall Pro', detail:'Email apideveloper@housecallpro.com — 5 sentences' },
+            { label:'BVM Partnership', detail:'Review contract IP clauses first, then approach your contact' },
+            { label:'AestheticsPro', detail:'Follow up with Denise — June 25' },
+          ].map(a => `
+            <div class="action-item">
+              <span class="ai-label">${a.label}</span>
+              <span class="ai-detail">${a.detail}</span>
+            </div>`).join('')}
+        </div>
+      </div>
+
       <div class="tab-panel" id="tab-content">
         <section>
           <div class="section-title">Blog Post Generator</div>
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:24px">
             <div style="margin-bottom:16px">
-              <label class="field-label" style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Topic</label>
-              <input id="blog-topic" class="field-input" type="text" placeholder="e.g. Why Milwaukee salons lose clients after hours" style="width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.95rem;outline:none" />
+              <label style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Topic</label>
+              <input id="blog-topic" type="text" placeholder="e.g. Why Milwaukee salons lose clients after hours" style="width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.95rem;outline:none;margin-bottom:0" />
             </div>
             <div style="margin-bottom:16px">
-              <label class="field-label" style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Keywords (comma separated)</label>
-              <input id="blog-keywords" class="field-input" type="text" placeholder="AI receptionist, Milwaukee, missed calls" style="width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.95rem;outline:none" />
+              <label style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Keywords (comma separated)</label>
+              <input id="blog-keywords" type="text" placeholder="AI receptionist, Milwaukee, missed calls" style="width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.95rem;outline:none" />
             </div>
             <div style="margin-bottom:20px">
-              <label class="field-label" style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Video Format</label>
+              <label style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Video Format</label>
               <select id="video-format" style="width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.95rem;outline:none">
                 <option value="vertical">Vertical (TikTok / Reels 9:16)</option>
                 <option value="horizontal">Horizontal (YouTube 16:9)</option>
               </select>
             </div>
-            <button onclick="generateContent()" id="generate-btn" style="width:100%;padding:14px;background:var(--gold);color:#000;border:none;border-radius:8px;font-family:Inter,sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;letter-spacing:0.03em">Generate Blog Post + Video</button>
+            <button onclick="generateContent()" id="generate-btn" style="width:100%;padding:14px;background:var(--gold);color:#000;border:none;border-radius:8px;font-family:Inter,sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer">Generate Blog Post + Video</button>
             <div id="content-status" style="margin-top:16px;font-size:0.85rem;color:var(--muted);text-align:center;display:none"></div>
             <div id="content-result" style="margin-top:16px;display:none">
               <div style="background:var(--bg);border:1px solid rgba(201,168,76,0.3);border-radius:8px;padding:16px">
@@ -670,7 +689,7 @@
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px">
             <div class="section-title" style="margin-bottom:16px">Connected Accounts</div>
             <div id="social-accounts" style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">Loading...</div>
-            <a id="connect-meta-btn" href="#" onclick="connectMeta()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#1877f2;color:#fff;border-radius:8px;text-decoration:none;font-size:0.85rem;font-weight:600;cursor:pointer">Connect Facebook + Instagram</a>
+            <a href="#" onclick="connectMeta()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#1877f2;color:#fff;border-radius:8px;text-decoration:none;font-size:0.85rem;font-weight:600;cursor:pointer">Connect Facebook + Instagram</a>
           </div>
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px">
             <div class="section-title" style="margin-bottom:12px">Recent Posts</div>
@@ -682,25 +701,6 @@
             </div>
           </div>
         </section>
-      </div>
-
-      <div class="tab-panel" id="tab-actions">
-        <div class="action-list">
-          ${[
-            { label:'Text Zoe', detail:'Schedule Tiger Lily demo — she reached out first' },
-            { label:'Text Patricia', detail:'Follow up on payment — verbally agreed $125/mo' },
-            { label:'Text Jared', detail:'Confirm he received June 5 proposal email' },
-            { label:'Twilio SMS', detail:'Day 54 — open support ticket at twilio.com now' },
-            { label:'6 Outreach Emails', detail:'Capitol Family Dental, Oakfield, MKE Dental Arts, Aesthetics 360, EvolvMD, RemedyNow' },
-            { label:'Housecall Pro', detail:'Email apideveloper@housecallpro.com — 5 sentences' },
-            { label:'BVM Partnership', detail:'Review contract IP clauses first, then approach your contact' },
-            { label:'AestheticsPro', detail:'Follow up with Denise — June 25' },
-          ].map(a => `
-            <div class="action-item">
-              <span class="ai-label">${a.label}</span>
-              <span class="ai-detail">${a.detail}</span>
-            </div>`).join('')}
-        </div>
       </div>`;
   }
 
