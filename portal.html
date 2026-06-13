@@ -779,7 +779,7 @@
 
   /* ── SOCIAL CONNECT ── */
   function connectMeta() {
-    window.location.href = 'https://www.facebook.com/v25.0/dialog/oauth?client_id=876781071510984&redirect_uri=https%3A%2F%2Faria-booking-server-production.up.railway.app%2Fsocial%2Fmeta%2Fcallback&scope=pages_show_list%2Cpublic_profile&response_type=code';
+    window.location.href = 'https://www.facebook.com/v25.0/dialog/oauth?client_id=876781071510984&redirect_uri=https%3A%2F%2Faria-booking-server-production.up.railway.app%2Fsocial%2Fmeta%2Fcallback&scope=pages_show_list%2Cpages_read_engagement%2Cpages_manage_posts&response_type=code';
   }
 
   async function loadSocialAccounts() {
@@ -832,6 +832,21 @@
         document.getElementById('blog-url').href = blog.url;
         document.getElementById('blog-url').textContent = blog.url;
         result.style.display = 'block';
+        status.textContent = 'Blog published. Posting to Facebook...';
+        // Auto-post to Facebook
+        try {
+          const fbPost = await fetch(`${RAILWAY}/social/post`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              message: `${topic}\n\nRead the full article: ${blog.url}\n\n#SmallBusiness #Milwaukee #AI #AIReceptionist`,
+              platforms: ['facebook']
+            })
+          });
+          const fbData = await fbPost.json();
+          if (fbData.success) status.textContent = 'Blog published and posted to Facebook!';
+          else status.textContent = 'Blog published. Facebook post: ' + (fbData.error || 'check later');
+        } catch { status.textContent = 'Blog published. Facebook posting failed silently.'; }
         status.textContent = 'Blog published. Rendering video...';
       } else {
         status.textContent = 'Blog error: ' + (blog.error || 'Unknown');
