@@ -377,7 +377,10 @@
     <label class="field-label" for="email-input">Email</label>
     <input class="field-input" type="email" id="email-input" placeholder="you@example.com" autocomplete="email" />
     <label class="field-label" for="pw-input">Password</label>
-    <input class="field-input" type="password" id="pw-input" placeholder="Password" autocomplete="current-password" />
+    <div style="position:relative">
+      <input class="field-input" type="password" id="pw-input" placeholder="Password" autocomplete="current-password" style="width:100%;padding-right:48px" />
+      <button onclick="togglePw()" type="button" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:#888;cursor:pointer;font-size:1rem;padding:0" id="pw-eye">👁</button>
+    </div>
     <button class="login-btn" onclick="doLogin()">Sign In</button>
     <div class="login-error" id="login-error">Invalid email or password.</div>
   </div>
@@ -402,7 +405,7 @@
 <script>
   /* ── ACCOUNTS ── */
   const ACCOUNTS = {
-    'abner@omnidesq.com': { password: 'omnidesq2026', role: 'admin', name: 'Abner' },
+    'abner@omnidesq.com': { password: 'NewPass22', role: 'admin', name: 'Abner' },
     'zoe@tigerlily.com':  { password: 'tigerlily2026', role: 'client', name: 'Zoe', client: 'tiger-lily' },
     'patricia@lawmejia.com': { password: 'lawmejia2026', role: 'client', name: 'Patricia', client: 'patricia' },
     'jaredluribe@gmail.com': { password: 'desertcoats2026', role: 'client', name: 'Jared', client: 'jared' },
@@ -530,6 +533,13 @@
   }
 
   document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+  function togglePw() {
+    const input = document.getElementById('pw-input');
+    const eye = document.getElementById('pw-eye');
+    if (input.type === 'password') { input.type = 'text'; eye.textContent = '🙈'; }
+    else { input.type = 'password'; eye.textContent = '👁'; }
+  }
   document.getElementById('email-input').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('pw-input').focus(); });
 
   /* ── RENDER ── */
