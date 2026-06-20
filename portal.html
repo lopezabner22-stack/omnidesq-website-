@@ -743,6 +743,18 @@
 
       <div class="tab-panel" id="tab-ads">
         <div id="ads-content" style="color:var(--muted);font-size:0.9rem">Loading ad account data...</div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px;margin-top:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:600;font-size:1rem;margin-bottom:4px">🔍 Google Ads</div>
+              <div style="font-size:0.82rem;color:var(--muted)">Basic Access application submitted June 19. Approval expected within 3 business days.</div>
+            </div>
+            <span style="font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:20px;background:rgba(201,168,76,0.12);color:var(--gold);border:1px solid rgba(201,168,76,0.28)">PENDING</span>
+          </div>
+          <div style="margin-top:14px;font-size:0.78rem;color:var(--muted)">
+            Once approved, this section will show: spend, impressions, clicks, CPC, campaign status, and keyword performance for all client accounts.
+          </div>
+        </div>
       </div>
 
       <div class="tab-panel" id="tab-listings">
@@ -758,13 +770,44 @@
         </section>
         <section style="margin-top:32px">
           <div class="section-title">Yelp Reviews</div>
-          <div id="yelp-content" style="color:var(--muted);font-size:0.9rem">
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px">
-              <div style="margin-bottom:12px;font-size:0.82rem">Search a business on Yelp</div>
-              <input id="yelp-term" type="text" placeholder="Business name" style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.88rem;outline:none;margin-bottom:10px" />
-              <input id="yelp-location" type="text" placeholder="City, e.g. Milwaukee, WI" style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.88rem;outline:none;margin-bottom:10px" />
-              <button onclick="searchYelp()" style="padding:10px 24px;background:var(--gold);color:#000;border:none;border-radius:8px;font-family:Inter,sans-serif;font-weight:700;cursor:pointer">Search Yelp</button>
-              <div id="yelp-results" style="margin-top:14px"></div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px">
+            <div style="margin-bottom:12px;font-size:0.82rem;color:var(--muted)">Search a business on Yelp</div>
+            <input id="yelp-term" type="text" placeholder="Business name" style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.88rem;outline:none;margin-bottom:10px" />
+            <input id="yelp-location" type="text" placeholder="City, e.g. Milwaukee, WI" style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.88rem;outline:none;margin-bottom:10px" />
+            <button onclick="searchYelp()" style="padding:10px 24px;background:var(--gold);color:#000;border:none;border-radius:8px;font-family:Inter,sans-serif;font-weight:700;cursor:pointer">Search Yelp</button>
+            <div id="yelp-results" style="margin-top:14px"></div>
+            <div style="margin-top:12px;font-size:0.75rem;color:var(--muted)">Note: Yelp API key required for live results. <a href="https://www.yelp.com/developers/v3/manage_app" target="_blank" style="color:var(--gold)">Get free key</a> and send to Pedro.</div>
+          </div>
+        </section>
+
+        <section style="margin-top:32px">
+          <div class="section-title">Bing Places</div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-weight:600;font-size:0.9rem;margin-bottom:4px">Bing Places for Business</div>
+                <div style="font-size:0.8rem;color:var(--muted)">Free listing — syncs with Apple Maps and Bing Search</div>
+              </div>
+              <a href="https://www.bingplaces.com" target="_blank" style="padding:8px 18px;background:var(--gold);color:#000;border-radius:8px;font-family:Inter,sans-serif;font-weight:700;font-size:0.82rem;text-decoration:none">Manage Listing</a>
+            </div>
+            <div style="margin-top:12px;font-size:0.78rem;color:var(--muted);border-top:1px solid var(--border);padding-top:10px">
+              Bing Places API integration coming soon. For now, manage your listing directly at bingplaces.com — it automatically syncs with Apple Maps, Bing Search, and Cortana.
+            </div>
+          </div>
+        </section>
+
+        <section style="margin-top:32px">
+          <div class="section-title">Foursquare</div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-weight:600;font-size:0.9rem;margin-bottom:4px">Foursquare Places</div>
+                <div style="font-size:0.8rem;color:var(--muted)">Powers location data for 100k+ apps</div>
+              </div>
+              <a href="https://foursquare.com/businesses" target="_blank" style="padding:8px 18px;background:var(--gold);color:#000;border-radius:8px;font-family:Inter,sans-serif;font-weight:700;font-size:0.82rem;text-decoration:none">Manage Listing</a>
+            </div>
+            <div style="margin-top:12px;font-size:0.78rem;color:var(--muted);border-top:1px solid var(--border);padding-top:10px">
+              Foursquare search integration coming soon. Claim and manage your business listing at foursquare.com/businesses.
             </div>
           </div>
         </section>
