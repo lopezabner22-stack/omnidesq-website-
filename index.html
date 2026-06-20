@@ -189,8 +189,20 @@
   .footer-text { font-size: 12px; color: var(--gray); }
   .footer-email { font-size: 12px; color: var(--blue); }
 
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all .3s; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(8,13,22,0.98); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { color: var(--white); text-decoration: none; font-size: 1.4rem; font-weight: 600; transition: color .2s; }
+  .mobile-menu a:hover { color: var(--blue); }
+  .mobile-menu .close-btn { position: absolute; top: 24px; right: 24px; background: none; border: none; color: var(--white); font-size: 2rem; cursor: pointer; }
+
   @media (max-width: 768px) {
     .nav-links { display: none; }
+    .hamburger { display: flex; }
     .steps, .features, .pricing-grid, .contact-grid { grid-template-columns: 1fr; }
     .stats-inner { gap: 20px; }
     footer { flex-direction: column; text-align: center; }
@@ -200,21 +212,44 @@
 <body>
 
 <nav>
-  <a href="#" class="nav-logo">
+  <a href="/" class="nav-logo">
     <img src="logo.png" alt="Omnidesq">
     <span>OMNIDESQ</span>
   </a>
   <div class="nav-links">
-    <a href="#how">How It Works</a>
-    <a href="#features">Features</a>
-    <a href="#pricing">Pricing</a>
+    <a href="/#how">How It Works</a>
+    <a href="/#features">Features</a>
+    <a href="/#pricing">Pricing</a>
     <a href="/calculator.html">Calculator</a>
-    <a href="#blog">Blog</a>
-    <a href="#contact">Contact</a>
-    <a href="/es/">Español</a>
+    <a href="/blog.html">Blog</a>
+    <a href="/#contact">Contact</a>
+    <a href="/es/">Espa&ntilde;ol</a>
   </div>
-  <a href="#contact" class="nav-cta">Get Started</a>
+  <a href="/#contact" class="nav-cta">Get Started</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <button class="close-btn" onclick="toggleMenu()">&times;</button>
+  <a href="/#how" onclick="toggleMenu()">How It Works</a>
+  <a href="/#features" onclick="toggleMenu()">Features</a>
+  <a href="/#pricing" onclick="toggleMenu()">Pricing</a>
+  <a href="/calculator.html" onclick="toggleMenu()">Calculator</a>
+  <a href="/blog.html" onclick="toggleMenu()">Blog</a>
+  <a href="/#contact" onclick="toggleMenu()">Contact</a>
+  <a href="/es/" onclick="toggleMenu()">Espa&ntilde;ol</a>
+  <a href="/#contact" style="background:var(--blue);padding:14px 32px;border-radius:8px;font-size:1rem" onclick="toggleMenu()">Get Started</a>
+</div>
+
+<script>
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobile-menu').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('mobile-menu').classList.contains('open') ? 'hidden' : '';
+}
+</script>
 
 <section class="hero">
   <div class="hero-inner">

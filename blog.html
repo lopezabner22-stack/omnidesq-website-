@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Omnidesq AI Receptionist</title>
+<meta name="description" content="Insights on AI receptionists, small business automation, and growing your practice. From the Omnidesq team in Milwaukee.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --dark: #080d16; --card: #0d1520; --border: #1a2840;
+    --blue: #3b82f6; --white: #f0f6ff; --gray: #6b7e95;
+    --gold: #C9A84C;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--dark); color: var(--white); }
+
+  /* NAV */
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 72px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--dark); z-index: 100; }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo img { height: 48px; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { color: var(--gray); text-decoration: none; font-size: 14px; transition: color .2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--white); }
+  .nav-cta { background: var(--blue); color: #fff; padding: 9px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; }
+
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all .3s; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(8,13,22,0.98); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { color: var(--white); text-decoration: none; font-size: 1.4rem; font-weight: 600; }
+  .mobile-menu .close-btn { position: absolute; top: 24px; right: 24px; background: none; border: none; color: var(--white); font-size: 2rem; cursor: pointer; }
+
+  /* HERO */
+  .blog-hero { padding: 64px 5% 48px; border-bottom: 1px solid var(--border); }
+  .blog-hero h1 { font-size: 2.4rem; font-weight: 700; margin-bottom: 12px; }
+  .blog-hero p { color: var(--gray); font-size: 1rem; max-width: 540px; }
+
+  /* GRID */
+  .blog-grid { max-width: 1100px; margin: 0 auto; padding: 56px 5% 100px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+
+  .post-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; text-decoration: none; color: inherit; }
+  .post-card:hover { border-color: var(--blue); transform: translateY(-2px); }
+  .post-date { font-size: 0.72rem; color: var(--gray); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+  .post-title { font-size: 1.05rem; font-weight: 600; line-height: 1.4; margin-bottom: 12px; color: var(--white); }
+  .post-excerpt { font-size: 0.85rem; color: var(--gray); line-height: 1.6; flex: 1; }
+  .post-read { margin-top: 18px; font-size: 0.82rem; font-weight: 600; color: var(--blue); }
+
+  /* LOADING */
+  .loading { text-align: center; padding: 80px 20px; color: var(--gray); font-size: 0.9rem; }
+
+  footer { border-top: 1px solid var(--border); padding: 24px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-logo { color: var(--gold); font-weight: 700; font-size: 1rem; letter-spacing: .06em; }
+  .footer-text { font-size: 12px; color: var(--gray); }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .blog-hero h1 { font-size: 1.6rem; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo"><img src="logo.png" alt="Omnidesq"></a>
+  <div class="nav-links">
+    <a href="/#how">How It Works</a>
+    <a href="/#features">Features</a>
+    <a href="/#pricing">Pricing</a>
+    <a href="/calculator.html">Calculator</a>
+    <a href="/blog.html" class="active">Blog</a>
+    <a href="/#contact">Contact</a>
+  </div>
+  <a href="/#contact" class="nav-cta">Get Started</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <button class="close-btn" onclick="toggleMenu()">&times;</button>
+  <a href="/#how" onclick="toggleMenu()">How It Works</a>
+  <a href="/#features" onclick="toggleMenu()">Features</a>
+  <a href="/#pricing" onclick="toggleMenu()">Pricing</a>
+  <a href="/calculator.html" onclick="toggleMenu()">Calculator</a>
+  <a href="/blog.html" onclick="toggleMenu()">Blog</a>
+  <a href="/#contact" onclick="toggleMenu()">Contact</a>
+  <a href="/#contact" style="background:var(--blue);padding:14px 32px;border-radius:8px" onclick="toggleMenu()">Get Started</a>
+</div>
+
+<div class="blog-hero">
+  <h1>The Omnidesq Blog</h1>
+  <p>Insights on AI receptionists, small business growth, and automating the stuff that slows you down.</p>
+</div>
+
+<div class="blog-grid" id="blog-grid">
+  <div class="loading">Loading posts...</div>
+</div>
+
+<footer>
+  <div class="footer-logo">Omnidesq</div>
+  <div class="footer-text">&copy; 2026 Omnidesq. Milwaukee, WI.</div>
+</footer>
+
+<script>
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobile-menu').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('mobile-menu').classList.contains('open') ? 'hidden' : '';
+}
+
+// Known posts — updated automatically when new posts are published
+const POSTS = [
+  { slug: '2026-06-20-how-ai-receptionists-help-milwaukee-restaurants-handle-the-lunch-rush', date: 'June 20, 2026', title: 'How AI Receptionists Help Milwaukee Restaurants Handle the Lunch Rush', excerpt: 'Restaurants lose orders every day to missed calls during the rush. Here\'s how AI changes that.' },
+  { slug: '2026-06-20-why-your-customers-hang-up-on-your-phone-menu-and-what-to-do-about-it', date: 'June 20, 2026', title: 'Why Your Customers Hang Up on Your Phone Menu (And What to Do About It)', excerpt: 'Phone menus frustrate customers. AI receptionists answer like a real person, every time.' },
+  { slug: '2026-06-13-the-hidden-cost-of-missed-calls-why-milwaukee-small-businesses-are-losing-customers', date: 'June 13, 2026', title: 'The Hidden Cost of Missed Calls: Why Milwaukee Small Businesses Are Losing Customers', excerpt: 'Every missed call is a missed customer. Find out how much it\'s really costing you.' },
+  { slug: '2026-06-14-5-reasons-hvac-companies-lose-customers-by-missing-phone-calls', date: 'June 14, 2026', title: '5 Reasons HVAC Companies Lose Customers by Missing Phone Calls', excerpt: 'HVAC is a high-urgency business. When someone calls with a broken AC in July, they\'re calling the next number if you don\'t answer.' },
+  { slug: 'what-is-an-ai-receptionist', date: '2026', title: 'What Is an AI Receptionist?', excerpt: 'A plain-English explanation of how AI receptionists work, what they can do, and who they\'re for.' },
+  { slug: 'how-many-patients-are-you-losing', date: '2026', title: 'How Many Patients Are You Losing to Voicemail?', excerpt: 'Most dental offices don\'t know how many patients they\'re losing. Here\'s how to find out.' },
+  { slug: 'milwaukee-practices-going-ai-first', date: '2026', title: 'Milwaukee Practices Going AI-First', excerpt: 'Local businesses in Milwaukee are adopting AI receptionists. Here\'s what they\'re experiencing.' },
+  { slug: 'aria-speaks-english-and-spanish', date: '2026', title: 'Aria Speaks English and Spanish', excerpt: 'Bilingual AI receptionist support for Milwaukee\'s diverse business community.' },
+];
+
+const grid = document.getElementById('blog-grid');
+grid.innerHTML = POSTS.map(p => `
+  <a class="post-card" href="/blog/${p.slug}.html">
+    <div class="post-date">${p.date}</div>
+    <div class="post-title">${p.title}</div>
+    <div class="post-excerpt">${p.excerpt}</div>
+    <div class="post-read">Read article &rarr;</div>
+  </a>
+`).join('');
+</script>
+
+</body>
+</html>
