@@ -676,6 +676,8 @@
         <button class="tab-btn" onclick="switchTab('agents',this)">Phone Agents</button>
         <button class="tab-btn" onclick="switchTab('pipeline',this)">Pipeline</button>
         <button class="tab-btn" onclick="switchTab('content',this)">Content</button>
+        <button class="tab-btn" onclick="switchTab('ads',this)">Ads</button>
+        <button class="tab-btn" onclick="switchTab('listings',this)">Listings</button>
         <button class="tab-btn" onclick="switchTab('actions',this)">Action Items</button>
       </div>
 
@@ -737,6 +739,35 @@
               <div class="p-value">${p.value}</div>
             </div>`).join('')}
         </div>
+      </div>
+
+      <div class="tab-panel" id="tab-ads">
+        <div id="ads-content" style="color:var(--muted);font-size:0.9rem">Loading ad account data...</div>
+      </div>
+
+      <div class="tab-panel" id="tab-listings">
+        <section>
+          <div class="section-title">Google Business Profile</div>
+          <div id="gmb-content" style="color:var(--muted);font-size:0.9rem;margin-bottom:24px">Loading...</div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px">
+            <div class="section-title" style="margin-bottom:14px">Post an Update</div>
+            <input id="gmb-post-text" type="text" placeholder="What's new? e.g. Now booking summer appointments!" style="width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.9rem;outline:none;margin-bottom:12px" />
+            <button onclick="postToGMB()" style="padding:10px 24px;background:var(--gold);color:#000;border:none;border-radius:8px;font-family:Inter,sans-serif;font-weight:700;cursor:pointer">Post to Google</button>
+            <div id="gmb-post-status" style="margin-top:10px;font-size:0.82rem;color:var(--muted)"></div>
+          </div>
+        </section>
+        <section style="margin-top:32px">
+          <div class="section-title">Yelp Reviews</div>
+          <div id="yelp-content" style="color:var(--muted);font-size:0.9rem">
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px">
+              <div style="margin-bottom:12px;font-size:0.82rem">Search a business on Yelp</div>
+              <input id="yelp-term" type="text" placeholder="Business name" style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.88rem;outline:none;margin-bottom:10px" />
+              <input id="yelp-location" type="text" placeholder="City, e.g. Milwaukee, WI" style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:Inter,sans-serif;font-size:0.88rem;outline:none;margin-bottom:10px" />
+              <button onclick="searchYelp()" style="padding:10px 24px;background:var(--gold);color:#000;border:none;border-radius:8px;font-family:Inter,sans-serif;font-weight:700;cursor:pointer">Search Yelp</button>
+              <div id="yelp-results" style="margin-top:14px"></div>
+            </div>
+          </div>
+        </section>
       </div>
 
       <div class="tab-panel" id="tab-actions">
@@ -885,6 +916,152 @@
     btns.forEach(b => b.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
     btn.classList.add('active');
+    if (name === 'ads') loadAds();
+    if (name === 'listings') loadListings();
+  }
+
+  /* ── ADS TAB ── */
+  let gmbLocations = [];
+
+  async function loadAds() {
+    const el = document.getElementById('ads-content');
+    if (!el) return;
+    el.innerHTML = '<div style="color:var(--muted)">Loading ad account data...</div>';
+    try {
+      const r = await fetch(`${RAILWAY}/ads/meta/summary`);
+      const data = await r.json();
+      if (!data.connected || data.error) {
+        el.innerHTML = `
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;text-align:center">
+            <div style="font-size:1.4rem;margin-bottom:12px">📊</div>
+            <div style="font-weight:600;margin-bottom:8px">Connect Facebook Ads</div>
+            <div style="font-size:0.82rem;color:var(--muted);margin-bottom:20px">${data.error || 'Connect your Meta account to see ad performance.'}</div>
+            <a href="#" onclick="connectMetaAds()" style="display:inline-block;padding:12px 28px;background:var(--gold);color:#000;border-radius:8px;font-weight:700;text-decoration:none;font-size:0.9rem">Connect Meta Ads</a>
+          </div>`;
+        return;
+      }
+      if (!data.adAccounts || data.adAccounts.length === 0) {
+        el.innerHTML = `<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;color:var(--muted)">No ad accounts found. <a href="https://business.facebook.com" target="_blank" style="color:var(--gold)">Create one at business.facebook.com</a>.</div>`;
+        return;
+      }
+      let html = '';
+      for (const acct of data.adAccounts) {
+        const ins = acct.insights;
+        html += `
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:16px">
+            <div style="font-weight:600;font-size:1rem;margin-bottom:14px">📊 ${acct.name}</div>
+            ${ins ? `
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:16px">
+                <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+                  <div style="font-size:1.6rem;font-weight:700;color:var(--gold)">$${parseFloat(ins.spend||0).toFixed(2)}</div>
+                  <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:4px">Spend (30d)</div>
+                </div>
+                <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+                  <div style="font-size:1.6rem;font-weight:700;color:var(--gold)">${parseInt(ins.reach||0).toLocaleString()}</div>
+                  <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:4px">Reach</div>
+                </div>
+                <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+                  <div style="font-size:1.6rem;font-weight:700;color:var(--gold)">${parseInt(ins.clicks||0).toLocaleString()}</div>
+                  <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:4px">Clicks</div>
+                </div>
+                <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+                  <div style="font-size:1.6rem;font-weight:700;color:var(--gold)">$${parseFloat(ins.cpc||0).toFixed(2)}</div>
+                  <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:4px">Cost/Click</div>
+                </div>
+              </div>` : '<div style="color:var(--muted);font-size:0.84rem;margin-bottom:12px">No spend data in last 30 days.</div>'}
+            ${acct.campaigns && acct.campaigns.length ? `
+              <div style="font-size:0.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:10px">Campaigns</div>
+              ${acct.campaigns.map(c => `
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;margin-bottom:6px">
+                  <div style="font-size:0.86rem;font-weight:500">${c.name}</div>
+                  <span style="font-size:0.68rem;font-weight:700;padding:3px 9px;border-radius:20px;${c.status==='ACTIVE'?'background:rgba(46,204,113,.12);color:#2ecc71;border:1px solid rgba(46,204,113,.28)':'background:rgba(100,100,100,.2);color:#aaa;border:1px solid #444'}">${c.status}</span>
+                </div>`).join('')}` : ''}
+          </div>`;
+      }
+      el.innerHTML = html;
+    } catch(e) {
+      el.innerHTML = `<div style="color:var(--red)">Error loading ads: ${e.message}</div>`;
+    }
+  }
+
+  function connectMetaAds() {
+    window.location.href = `${RAILWAY}/ads/meta/auth-url`;
+  }
+
+  /* ── LISTINGS TAB ── */
+
+  async function loadListings() {
+    loadGMB();
+  }
+
+  async function loadGMB() {
+    const el = document.getElementById('gmb-content');
+    if (!el) return;
+    el.innerHTML = '<span style="color:var(--muted)">Loading Google Business Profile...</span>';
+    try {
+      const r = await fetch(`${RAILWAY}/listings/gmb`);
+      const data = await r.json();
+      if (data.error) { el.innerHTML = `<span style="color:var(--muted)">${data.error}</span>`; return; }
+      if (!data.locations || data.locations.length === 0) {
+        el.innerHTML = `<div style="color:var(--muted)">No locations found. <a href="https://business.google.com" target="_blank" style="color:var(--gold)">Set up Google Business Profile</a>.</div>`;
+        return;
+      }
+      gmbLocations = data.locations;
+      el.innerHTML = data.locations.map(loc => `
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:12px;display:flex;gap:16px;align-items:center">
+          <div style="font-size:1.4rem">📍</div>
+          <div>
+            <div style="font-weight:600;font-size:0.95rem">${loc.title || loc.name}</div>
+            ${loc.phoneNumbers?.primaryPhone ? `<div style="font-size:0.8rem;color:var(--muted);margin-top:2px">${loc.phoneNumbers.primaryPhone}</div>` : ''}
+            ${loc.websiteUri ? `<a href="${loc.websiteUri}" target="_blank" style="font-size:0.78rem;color:var(--gold);margin-top:2px;display:block">${loc.websiteUri}</a>` : ''}
+          </div>
+        </div>`).join('');
+    } catch(e) {
+      el.innerHTML = `<span style="color:var(--red)">Error: ${e.message}</span>`;
+    }
+  }
+
+  async function postToGMB() {
+    const text = document.getElementById('gmb-post-text').value.trim();
+    const status = document.getElementById('gmb-post-status');
+    if (!text) { status.textContent = 'Enter some text first.'; return; }
+    if (!gmbLocations.length) { status.textContent = 'No GMB location loaded.'; return; }
+    status.textContent = 'Posting...';
+    try {
+      const r = await fetch(`${RAILWAY}/listings/gmb/post`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ locationName: gmbLocations[0].name, summary: text, callToActionUrl: 'https://omnidesq.com' })
+      });
+      const data = await r.json();
+      status.textContent = data.name ? '✅ Posted to Google!' : '⚠️ ' + (data.error || JSON.stringify(data));
+      status.style.color = data.name ? '#2ecc71' : 'var(--red)';
+    } catch(e) { status.textContent = 'Error: ' + e.message; status.style.color = 'var(--red)'; }
+  }
+
+  async function searchYelp() {
+    const term = document.getElementById('yelp-term').value.trim();
+    const location = document.getElementById('yelp-location').value.trim();
+    const el = document.getElementById('yelp-results');
+    if (!term || !location) { el.innerHTML = '<span style="color:var(--red)">Enter business name and city.</span>'; return; }
+    el.innerHTML = '<span style="color:var(--muted)">Searching...</span>';
+    try {
+      const r = await fetch(`${RAILWAY}/listings/yelp?term=${encodeURIComponent(term)}&location=${encodeURIComponent(location)}`);
+      const data = await r.json();
+      if (data.error) { el.innerHTML = `<div style="color:var(--muted)">${data.error}${data.setup ? '<br><small>' + data.setup + '</small>' : ''}</div>`; return; }
+      if (!data.businesses || !data.businesses.length) { el.innerHTML = '<span style="color:var(--muted)">No results found.</span>'; return; }
+      el.innerHTML = data.businesses.map(b => `
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:8px;display:flex;gap:14px;align-items:center">
+          ${b.image_url ? `<img src="${b.image_url}" style="width:52px;height:52px;border-radius:8px;object-fit:cover;flex-shrink:0" />` : '<div style="width:52px;height:52px;background:var(--surface);border-radius:8px;flex-shrink:0"></div>'}
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:0.9rem"><a href="${b.url}" target="_blank" style="color:var(--white);text-decoration:none">${b.name}</a></div>
+            <div style="font-size:0.78rem;color:var(--muted);margin-top:2px">${b.location?.display_address?.join(', ') || ''}</div>
+            <div style="margin-top:4px;display:flex;gap:10px;align-items:center">
+              <span style="color:#f5a623;font-size:0.88rem">${'★'.repeat(Math.round(b.rating))}</span>
+              <span style="font-size:0.78rem;color:var(--muted)">${b.rating} (${b.review_count} reviews)</span>
+            </div>
+          </div>
+        </div>`).join('');
+    } catch(e) { el.innerHTML = `<span style="color:var(--red)">Error: ${e.message}</span>`; }
   }
 
   /* ── CONTENT GENERATOR ── */
