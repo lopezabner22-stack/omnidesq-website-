@@ -208,6 +208,40 @@
     footer { flex-direction: column; text-align: center; }
   }
 </style>
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+  // Google Ads conversion tracking
+  gtag('config', 'AW-XXXXXXXXXX');
+</script>
+<!-- Meta Pixel -->
+<script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', 'PIXEL_ID_HERE');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=PIXEL_ID_HERE&ev=PageView&noscript=1"/></noscript>
+<!-- UTM Source Tracker -->
+<script>
+  (function(){
+    const params = new URLSearchParams(window.location.search);
+    const utmData = {};
+    ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid','fbclid'].forEach(k => {
+      if (params.get(k)) utmData[k] = params.get(k);
+    });
+    if (Object.keys(utmData).length) {
+      sessionStorage.setItem('omnidesq_utm', JSON.stringify(utmData));
+    }
+  })();
+</script>
 </head>
 <body>
 
@@ -529,6 +563,14 @@ async function submitForm(e) {
   btn.textContent = 'Sending...';
   btn.disabled = true;
   
+  // Attach UTM/source tracking data
+  try {
+    const utmRaw = sessionStorage.getItem('omnidesq_utm');
+    if (utmRaw) data.utm = JSON.parse(utmRaw);
+  } catch(e) {}
+  data.referrer = document.referrer || '';
+  data.landingPage = window.location.href;
+  
   try {
     // Try Railway, fallback gracefully
     const res = await fetch('https://aria-booking-server-production.up.railway.app/contact', {
@@ -543,6 +585,14 @@ async function submitForm(e) {
       msg.textContent = result.message;
       inputs.forEach(i => i.value = '');
       btn.textContent = 'Sent!';
+      // Fire conversion events
+      if (typeof gtag === 'function') {
+        gtag('event', 'conversion', { send_to: 'AW-XXXXXXXXXX/CONVERSION_LABEL' });
+        gtag('event', 'generate_lead', { currency: 'USD', value: 299 });
+      }
+      if (typeof fbq === 'function') {
+        fbq('track', 'Lead', { currency: 'USD', value: 299 });
+      }
     } else {
       msg.style.color = '#f87171';
       msg.textContent = result.message;
