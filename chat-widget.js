@@ -2,8 +2,9 @@
   'use strict';
 
   // ── Config ──────────────────────────────────────────────────────────────────
-  const CONTACT_ENDPOINT = 'https://aria-booking-server-production.up.railway.app/contact';
-  const BRAND = { bg: '#1a1a1a', gold: '#C9A84C', goldDark: '#a8872f', white: '#ffffff', muted: '#888' };
+  // Leads go to the app (app.omnidesq.com). The old Railway server is only a second try while it still exists.
+  const CONTACT_ENDPOINTS = ['https://app.omnidesq.com/contact', 'https://aria-booking-server-production.up.railway.app/contact'];
+  const BRAND = { bg: '#0f2237', gold: '#3d9df0', goldDark: '#1464b8', white: '#ffffff', muted: '#9fb2c6' };
 
   // ── Conversation state ───────────────────────────────────────────────────────
   const STATE = {
@@ -19,7 +20,7 @@
   const STEPS = [
     {
       // 0 – opener
-      message: "Hi! 👋 I'm Max, Omnidesq's AI assistant. Are you a business owner looking to stop missing calls?",
+      message: "Hi! 👋 I'm Max, Omnidesq's assistant. Do you run a business?",
       type: 'yesno',
       nextYes: 1,
       nextNo: 'not-owner',
@@ -28,21 +29,21 @@
       // 1 – business type
       message: "Great! What type of business do you run?",
       type: 'input',
-      inputLabel: 'e.g. dental office, law firm, salon…',
+      inputLabel: 'e.g. beauty studio, clinic, events company…',
       inputKey: 'business',
       next: 2,
     },
     {
-      // 2 – missed calls
-      message: "How many calls do you miss per week on average?",
+      // 2 – what they need most (kept in missedCalls so the rest of the script is unchanged)
+      message: "What would you most like off your plate?",
       type: 'input',
-      inputLabel: 'e.g. 10–20 per week',
+      inputLabel: 'e.g. phone calls, bookings, posts, ads',
       inputKey: 'missedCalls',
       next: 3,
     },
     {
       // 3 – demo pitch
-      message: "You're leaving money on the table! 💰\n\nWant to hear our AI receptionist right now? Call <strong>+1 (414) 815-9423</strong> — or I can set up a quick demo with Abner.\n\nLeave your name and email and we'll reach out ASAP:",
+      message: "Omnidesq covers that. It is one app for your phone, bookings, customers, posts, ads and reviews.\n\nYou can hear our phone receptionist right now at <strong>+1 (414) 815-9423</strong>, or I can set up a demo with Abner.\n\nLeave your name and email and we'll get back to you within one business day:",
       type: 'contact',
       next: 4,
     },
@@ -53,7 +54,7 @@
     },
   ];
 
-  const NOT_OWNER_MSG = "No worries! If you ever know a business owner who's tired of missing calls, send them our way. Have a great day! 😊";
+  const NOT_OWNER_MSG = "No worries! If you know a business owner who is juggling too many tools, send them our way. Have a great day! 😊";
 
   // ── Helpers ──────────────────────────────────────────────────────────────────
   function el(tag, attrs, ...children) {
@@ -294,7 +295,7 @@
     <div id="oc-chat-avatar">🤖</div>
     <div id="oc-chat-header-text">
       <p id="oc-chat-header-name">Max</p>
-      <p id="oc-chat-header-sub">Omnidesq AI Assistant · Online</p>
+      <p id="oc-chat-header-sub">Omnidesq assistant</p>
     </div>
   `;
   const closeBtn = el('button', { id: 'oc-chat-close', 'aria-label': 'Close chat' }, '✕');
@@ -436,15 +437,21 @@
             name,
             email,
             business: STATE.business,
-            message: `Chatbot lead — Business: ${STATE.business} | Missed calls/week: ${STATE.missedCalls}`,
+            message: `Website chat lead. Business: ${STATE.business} | Wants help with: ${STATE.missedCalls}`,
           };
-          const res = await fetch(CONTACT_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-          });
+          let sent = false;
+          for (const endpoint of CONTACT_ENDPOINTS) {
+            try {
+              const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+              });
+              if (res.ok) { sent = true; break; }
+            } catch { /* try the next server */ }
+          }
 
-          if (res.ok) {
+          if (sent) {
             addMessage(`${name} / ${email}`, 'user');
             clearFooter();
             showStep(4);
@@ -454,7 +461,7 @@
         } catch {
           form.classList.remove('oc-submitting');
           submitBtn.textContent = 'Book my demo →';
-          errDiv.textContent = 'Something went wrong — try emailing abner@omnidesq.com';
+          errDiv.textContent = 'That did not go through. Email abner@omnidesq.com';
         }
       });
 

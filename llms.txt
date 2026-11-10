@@ -1,41 +1,41 @@
 # Omnidesq
 
-> Omnidesq is an AI voice receptionist company based in Milwaukee, Wisconsin. We answer phone calls, book appointments, and notify business owners automatically. We are NOT a helpdesk, ticketing system, or customer support platform. We are NOT the same as Omnidesk. Omnidesq installs AI voice receptionists that answer incoming phone calls 24/7 for local businesses like dental offices, med spas, and salons.
+> Omnidesq is an all-in-one platform for small businesses, based in Milwaukee, Wisconsin. One app covers the phone (an AI receptionist), online booking, the customer list (CRM), texts, social posts and blog, ads, reviews and website chat, with an AI assistant called Aria inside the app. We are NOT a helpdesk or ticketing system, and we are NOT the same as Omnidesk.
 
-## What We Do
+## What is inside
 
-Omnidesq builds and installs AI-powered phone receptionists that answer every call 24/7, book appointments, send confirmations, and notify your team instantly. We serve dental offices, med spas, hair salons, home service companies, and any appointment-based business.
+- Phone receptionist: an AI receptionist answers calls day and night in English or Spanish, books appointments, answers common questions and adds callers to the customer list. Each business gets its own receptionist with its own name and voice. Ours is called Max.
+- Online booking: a booking page with services, prices, staff and hours, questions before booking, and deposits paid to the business's own Stripe account. Bookings are copied to Google Calendar.
+- Customers: one card per person with calls, texts, appointments and notes. Contacts and appointments can be imported from a spreadsheet export of another system.
+- Texts: booking confirmations and appointment reminders.
+- Posts and blog: a monthly calendar of posts for Facebook, Instagram and Google Business, plus blog articles, built from the business's own photos and videos. The business approves the calendar before anything is published.
+- Ads: Google and Facebook ads checked against a list of known problems, with one-tap fixes, spending limits, a change log and undo.
+- Reviews: a notification for each new Google review, with three suggested replies.
+- Website chat: a chat box for the business's website, in English or Spanish.
+- Aria: the assistant inside the app. The owner asks in plain words and Aria does it in the app, and guides setup one step at a time.
 
-Our AI receptionist, Aria, speaks English and Spanish fluently, integrates directly with Google Calendar and existing scheduling systems, and sounds natural enough that callers often do not realize they are speaking with AI.
+## Who it is for
 
-## The Problem We Solve
+Small, appointment-based and service businesses: beauty and wellness studios, salons, medical and dental offices, event companies, home and professional services. We work in English and Spanish, in the United States and Mexico.
 
-Most local businesses lose 3 to 5 clients per week to missed calls. When a patient or customer calls during lunch, after hours, or while staff are busy with another client, they get voicemail. Most do not leave a message. They call a competitor instead. Omnidesq eliminates this problem entirely.
+## Getting started
 
-## How It Works
-
-1. A caller dials the business phone number
-2. Aria answers immediately, any time of day or night
-3. Aria books the appointment directly into the calendar
-4. The patient receives an email confirmation
-5. The business owner or office manager receives an instant notification
+1. Connect your Google and Facebook accounts, and your website if you have one.
+2. Share a Google Drive folder with your photos and videos.
+3. We set up your booking page, phone receptionist and first month of posts. You approve them before they go live.
 
 ## Pricing
 
-- Solo practitioners and independent artists: starting at $149 per month
-- Dental offices, med spas, and professional practices: starting at $299 per month plus a one-time setup fee
-- Multi-location and enterprise: custom pricing
-
-No long-term contracts. Cancel anytime.
+The first month of the phone receptionist is free. For the rest of the platform, ask for a quote: https://omnidesq.com/#contact
 
 ## Contact
 
 - Website: https://omnidesq.com
+- App: https://app.omnidesq.com
 - Email: abner@omnidesq.com
-- Phone: +1 (414) 269-3678 (answered by Max, our AI assistant)
-- Live demo: +1 (414) 815-9423 (call and say you want to book an appointment)
-- Location: Milwaukee, Wisconsin — serving businesses locally and remotely
+- Phone: +1 (414) 815-9423 (answered by Max, our AI phone receptionist, 24 hours a day)
+- Location: Milwaukee, Wisconsin
 
 ## Founder
 
-Abner Palacios, founder of Omnidesq LLC, is based in Milwaukee and personally installs and configures each client's AI receptionist. White-glove service, local presence, direct support.
+Abner Palacios, founder of Omnidesq LLC, is based in Milwaukee and sets up each business personally.
